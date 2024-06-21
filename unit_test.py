@@ -38,7 +38,7 @@ class TestMethods:
         # in future look to compare:
         # 1. sparsification vs LRA
         # 2. sparsification vs stable rank of the matrix
-        for t in range(trials):
+        for t in tqdm(range(trials)):
             for s in range(len(sample_sizes)):
                 # sparsify the matrix
                 sparse_mat = method(data_matrix, sample_sizes[s])
@@ -55,11 +55,12 @@ class TestMethods:
         return mean_errors, errors_lo, errors_hi
     
     def runExps(self, patient_id, methods=["modBKKS21"]):
-        sample_sizes = np.arange(1000,10000,10)
+        sample_sizes = np.arange(1000,5000,100)
         algos = [self.mapStrToFunc(i) for i in methods]
         
         # the following line loads a very tall matrix!
-        data_matrix = self.loadData(patient_id)
+        # data_matrix = self.loadData(patient_id)
+        data_matrix = np.random.random((5000, 100))
         true_spectral_norm = np.linalg.norm(data_matrix, ord=2)
         print("true spectral norm computed")
         
