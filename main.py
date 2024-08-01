@@ -4,15 +4,17 @@ import numpy as np
 import math
 import matplotlib.pyplot as plt
 import matplotlib
-from src.visualization import Visualization
-# import sys
-# import time
+import sys
+import time
 # import optimization
 import cvxpy as cp
 import configparser
+import os, pickle
+from src.utils import fast_spectral_norm
 
 Config = configparser.ConfigParser()
 Config.read("config.ini")
+
 
 def objective_function_value(x):
     obj_funcs = opt_params['objective_functions'] if 'objective_functions' in opt_params else []
@@ -49,8 +51,7 @@ def objective_function_value(x):
     print("objective function value:", obj)
 
 def l2_norm(matrix):
-    values, vectors = np.linalg.eig(np.transpose(matrix) @ matrix)
-    return math.sqrt(np.max(np.abs(values)))
+    return fast_spectral_norm(matrix)
 
 if __name__ == '__main__':
     import argparse
@@ -75,10 +76,10 @@ if __name__ == '__main__':
     )
 
     args = parser.parse_args()
+    
     print("Algorithm:", args.method)
     # Use PortPy DataExplorer class to explore PortPy data
-    # data = pp.DataExplorer(data_dir='../data/')
-    root_folder = Config.get('Database', 'Folder')
+    root_folder = Config.get('Database', 'Network_Folder')
     data = pp.DataExplorer(data_dir=root_folder+"/data/")
     # Pick a patient
     data.patient_id = args.patient
@@ -111,100 +112,57 @@ if __name__ == '__main__':
     
     method = getattr(algorithms, args.method)
     
-    trials = 5
-    
-    ################# LOG FOR TRIALS #################
-    trial_sparse_nnzs = np.zeros((trials))
-    trial_rel_l2s = np.zeros((trials))
-    trial_dose_tildes = np.zeros((trials, A.shape[1]))
-    trial_dose_full = np.zeros((trials, A.shape[1]))
-    trial_all_violations = np.zeros((trials))
-    trial_ptv_violations = np.zeros((trials))
-    trial_rel_dos_disc_all = np.zeros((trials))
-    trial_rel_dos_disc_ptv = np.zeros((trials))
-    trial_min_dose_ptv_true = np.zeros((trials))
-    trial_min_dose_ptv_sparse = np.zeros((trials))
-    ##################################################
+    if args.method != "modifiedBKKS21":
+        B = method(A, args.threshold)
+    else:
+        B = method(A, args.samples)
+    print("number of non-zeros of the sparsed matrix: ", len(B.nonzero()[0]))
+    print("relative L2 norm (%): ", l2_norm(A - B) / l2_norm(A) * 100)
 
-    
-    for t in range(trials):
-        print("############# trial #############:", 1)
-        if args.method != "modifiedBKKS21":
-            B = method(A, args.threshold)
-        else:
-            B = method(A, args.samples)
-        trial_sparse_nnzs[t] = len(B.nonzero()[0])
-        print("number of non-zeros of the sparsed matrix: ", trial_sparse_nnzs[t])
-        trial_rel_l2s[t] = l2_norm(A - B) / l2_norm(A) * 100
-        print("relative L2 norm (%): ", trial_rel_l2s[t])
-        # sys.exit(1)
+    inf_matrix.A = B
+    plan = pp.Plan(ct=ct, structs=structs, beams=beams, inf_matrix=inf_matrix, clinical_criteria=clinical_criteria)
+    opt = pp.Optimization(plan, opt_params=opt_params, clinical_criteria=clinical_criteria)
+    opt.create_cvxpy_problem()
+    if args.solver == "SCIPY":
+        x = opt.solve(solver=cp.SCIPY, scipy_options={"method": "highs"}, verbose=True)
+    else:
+        x = opt.solve(solver=args.solver, verbose=False)
 
-        inf_matrix.A = B
-        plan = pp.Plan(ct=ct, structs=structs, beams=beams, inf_matrix=inf_matrix, clinical_criteria=clinical_criteria)
-        opt = pp.Optimization(plan, opt_params=opt_params, clinical_criteria=clinical_criteria)
-        opt.create_cvxpy_problem()
-        if args.solver == "SCIPY":
-            x = opt.solve(solver=cp.SCIPY, scipy_options={"method": "highs"}, verbose=True)
-        else:
-            x = opt.solve(solver=args.solver, verbose=False)
+    opt_full.vars['x'].value = x['optimal_intensity']
+    violation = 0
+    for constraint in opt_full.constraints[2:]:
+        violation += np.sum(constraint.violation())
+    print("feasibility violation:", violation)
+    print("feasibility violation for PTV:", np.sum(opt.constraints[3].violation()))
+    objective_function_value(x['optimal_intensity'])
 
-        opt_full.vars['x'].value = x['optimal_intensity']
-        violation = 0
-        for constraint in opt_full.constraints[2:]:
-            violation += np.sum(constraint.violation())
-        trial_all_violations[t] = violation
-        print("feasibility violation:", trial_all_violations[t])
-        trial_ptv_violations[t] = np.sum(opt.constraints[3].violation())
-        print("feasibility violation for PTV:", trial_ptv_violations[t])
-        objective_function_value(x['optimal_intensity'])
-
-        dose_1d = B @ (x['optimal_intensity'] * plan.get_num_of_fractions())
-        trial_dose_tildes[t,:] = dose_1d
-        dose_full = A @ (x['optimal_intensity'] * plan.get_num_of_fractions())
-        trial_dose_full[t,:] = dose_full
-        trial_rel_dos_disc_all[t] = (np.linalg.norm(dose_full - dose_1d) / np.linalg.norm(dose_full)) * 100
-        print("relative dose discrepancy (%): ", trial_rel_dos_disc_all[t])
-        
-        ptv_vox = inf_matrix.get_opt_voxels_idx('PTV')
-        trial_rel_dos_disc_ptv[t] = (np.linalg.norm(dose_full[ptv_vox] - dose_1d[ptv_vox]) / np.linalg.norm(dose_full[ptv_vox])) * 100
-        print("relative dose discrepancy of PTV (%): ", trial_rel_dos_disc_ptv[t])
-        
-        trial_min_dose_ptv_true[t] = np.min(dose_full[ptv_vox])
-        print("min true dose for PTV:", trial_min_dose_ptv_true[t])
-        trial_min_dose_ptv_sparse[t] = np.min(dose_1d[ptv_vox])
-        print("min approx dose for PTV:", trial_min_dose_ptv_sparse[t])
-        
-    ############# Compute the means and report/display #############
-    print("#############################################################################################")
-    print("mean, std of sparse_nnzs:", np.mean(trial_sparse_nnzs), np.std(trial_sparse_nnzs))
-    print("mean, std of trial_rel_l2s:", np.mean(trial_rel_l2s), np.std(trial_rel_l2s))
-    print("mean, std of feasibility violations:", np.mean(trial_all_violations), np.std(trial_all_violations))
-    print("mean, std of feasibility violations of PTV:", np.mean(trial_ptv_violations), np.std(trial_ptv_violations))
-    print("mean, std of relative dose discrepancy full (%):", np.mean(trial_rel_dos_disc_all), np.std(trial_rel_dos_disc_all))
-    print("mean, std of relative dose discrepancy PTV (%):", np.mean(trial_rel_dos_disc_ptv), np.std(trial_rel_dos_disc_ptv))
-    print("mean, std of min true dose for PTV:", np.mean(trial_min_dose_ptv_true), np.std(trial_min_dose_ptv_true))
-    print("mean, std of min approx dose for PTV:", np.mean(trial_min_dose_ptv_sparse), np.std(trial_min_dose_ptv_sparse))
-    print("#############################################################################################")
-    ################################################################
+    dose_1d = B @ (x['optimal_intensity'] * plan.get_num_of_fractions())
+    dose_full = A @ (x['optimal_intensity'] * plan.get_num_of_fractions())
+    print("relative dose discrepancy (%): ", (np.linalg.norm(dose_full - dose_1d) / np.linalg.norm(dose_full)) * 100)
     
+    ptv_vox = inf_matrix.get_opt_voxels_idx('PTV')
+    print("relative dose discrepancy of PTV (%): ", (np.linalg.norm(dose_full[ptv_vox] - dose_1d[ptv_vox]) / np.linalg.norm(dose_full[ptv_vox])) * 100)
     
-    # mean_dose_1d = np.mean(trial_dose_tildes, axis=1)
-    # p10_dose_1d = np.percentile(trial_dose_tildes, axis=1, p=10)
-    # p90_dose_1d = np.percentile(trial_dose_tildes, axis=1, p=90)
-    # mean_dose_full = np.mean(trial_dose_full, axis=1)
-    # p10_dose_full = np.percentile(trial_dose_full, axis=1, p=10)
-    # p90_dose_full = np.percentile(trial_dose_full, axis=1, p=90)
+    print("min true dose for PTV:", np.min(dose_full[ptv_vox]))
+    print("min approx dose for PTV:", np.min(dose_1d[ptv_vox]))
     
-    struct_names = ['PTV', 'ESOPHAGUS', 'HEART', 'CORD']
+    # save trial_dose_tildes, trial_dose_full in pickle
+    folder = "./outputs/medical_"+args.patient
+    if not os.path.isdir(folder):
+        os.makedirs(folder)
+    timestr = time.strftime("%Y%m%d-%H%M%S")    
+    savefilename = folder+"/"+str(args.patient)+"_"+str(args.method)+"_"+str(args.threshold)+"_"+str(args.samples)+"_"+str(timestr)+".pkl"
+    file_handler = open(savefilename, "wb")
+    pickle.dump([dose_1d, dose_full], file_handler)
+    file_handler.close()
     
-    matplotlib.rcParams.update({'font.size': 14})
-    plt.rcParams['figure.max_open_warning'] = 50
-    fig, ax = plt.subplots(figsize=(12, 8))
-    # Turn on norm flag for same normalization for sparse and full dose.
-    # ax = pp.Visualization.plot_dvh(plan, dose_1d=dose_1d , struct_names=struct_names, style='solid', ax=ax, norm_flag=True)
-    # ax = pp.Visualization.plot_dvh(plan_full, dose_1d=dose_full, struct_names=struct_names, style='dotted', ax=ax, norm_flag=True)
-    ax = Visualization.plot_robust_dvh(plan, dose_1d=trial_dose_tildes , struct_names=struct_names, style='solid', ax=ax, norm_flag=True, font_size=14)
-    ax = Visualization.plot_robust_dvh(plan_full, dose_1d=trial_dose_full, struct_names=struct_names, style='dotted', ax=ax, norm_flag=True, font_size=14)
-    plt.savefig("Figures/dvhs/"+str(args.method) + "_" + str(args.threshold) + "_" + str(args.patient) + "_" + str(args.samples) + ".pdf")
+    # VISUALIZATION ONLY    
+    # struct_names = ['PTV', 'ESOPHAGUS', 'HEART', 'CORD']
+    
+    # fig, ax = plt.subplots(figsize=(12, 8))
+    # # Turn on norm flag for same normalization for sparse and full dose.
+    # # ax = pp.Visualization.plot_dvh(plan, dose_1d=dose_1d , struct_names=struct_names, style='solid', ax=ax, norm_flag=True)
+    # # ax = pp.Visualization.plot_dvh(plan_full, dose_1d=dose_full, struct_names=struct_names, style='dotted', ax=ax, norm_flag=True)
+    # plt.savefig("Figures/dvhs/"+str(args.method) + "_" + str(args.threshold) + "_" + str(args.patient) + "_" + str(args.samples) + ".pdf")
         
     # print("total time to run code:", time.time() - time_start)

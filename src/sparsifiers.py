@@ -103,7 +103,7 @@ def row_operation(copy_row, threshold):
         indices = np.random.choice(argzero, k, p=argzero_copy/sum, replace=True)
         np.add.at(copy_row, indices, sum / k)
 
-def RMR(matrix=np.zeros((100,100)), threshold=0.05):
+def RMR(matrix=np.zeros((100,100)), threshold=0.05, sparsify_op=True):
     """
     code from RMR
     """
@@ -111,7 +111,8 @@ def RMR(matrix=np.zeros((100,100)), threshold=0.05):
     np.apply_along_axis(row_operation, 1, copy_matrix, threshold)
     # print("**************checking***************", copy_matrix.shape)
     # print("**************checking***************", fast_spectral_norm(copy_matrix))
-    # copy_matrix = scipy.sparse.csr_matrix(copy_matrix)
+    if sparsify_op:
+        copy_matrix = scipy.sparse.csr_matrix(copy_matrix)
     return copy_matrix
 
 
