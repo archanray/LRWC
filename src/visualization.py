@@ -189,7 +189,8 @@ class Visualization:
         ax.set_xlim(0, final_xmax)
         ax.set_ylim(0, max_vol)
         # ax.legend(legend, prop={'size': legend_font_size}, loc=legend_loc)
-        ax.legend(prop={'size': legend_font_size}, loc=legend_loc)
+        if style == "solid":
+            ax.legend(prop={'size': legend_font_size}, loc=legend_loc)
         ax.grid(visible=True, which='major', color='#666666', linestyle='-')
 
         # Show the minor grid lines with very faint and almost transparent grey lines
