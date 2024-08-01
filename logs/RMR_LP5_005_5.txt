@@ -1,0 +1,30 @@
+Algorithm: RMR
+Creating optimization structures.. It may take some time due to dilation
+Optimization structures created!!
+Creating BEV..
+Loading full influence matrix..
+Done
+Creating BEV..
+Loading sparse influence matrix...
+Done
+Objective Start
+Objective done
+Constraints Start
+Constraints done
+number of non-zeros of the original matrix:  900962412
+number of non-zeros of the sparsed matrix:  11270800
+relative L2 norm (%):  7.303096354007721
+Objective Start
+Objective done
+Constraints Start
+Constraints done
+Running Optimization..
+Optimal value: 71.32692291978395
+Elapsed time: 524.2930843830109 seconds
+feasibility violation: 0.17542163367553898
+feasibility violation for PTV: 0.0
+objective function value: 70.55766074825056
+relative dose discrepancy (%):  1.3616406213704124
+relative dose discrepancy of PTV (%):  0.7600024311147391
+min true dose for PTV: 56.72982870204709
+min approx dose for PTV: 58.098136052395
