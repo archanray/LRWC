@@ -57,6 +57,7 @@ class Visualization:
         """
 
         plt.rcParams['font.size'] = 14
+        legend = []
         
         if not isinstance(dose_1d_list, list):
             dose_1d_list = [dose_1d_list]
@@ -147,15 +148,20 @@ class Visualization:
                 ax.set_ylabel('Volume Fraction ($\%$)', fontsize=fontsize)
             # ax.plot(x, 100 * y, linestyle=style, linewidth=width, color=colors[count])
 
-            plt.plot(d_min_mat, 100 * y, linestyle='dotted', linewidth=width*0.5, color=colors[count])
-            plt.plot(d_max_mat, 100 * y, linestyle='dotted', linewidth=width*0.5, color=colors[count])
-            plt.fill_betweenx(100 * y, d_min_mat, d_max_mat, alpha=0.25, label=all_orgs[i], color=colors[count])
-
+            # plt.plot(d_min_mat, 100 * y, linestyle='dotted', linewidth=width*0.5, color=colors[count])
+            # plt.plot(d_max_mat, 100 * y, linestyle='dotted', linewidth=width*0.5, color=colors[count])
+            ax.fill_betweenx(100 * y, d_min_mat, d_max_mat, alpha=0.25, color=colors[count])
+            
+            # legend.append(all_orgs[i])
+            
             # Plot user-specified scenarios.
             if plot_scenario is not None:
                 if plot_scenario == 'mean':
                     dose_mean = np.mean(d_sort_mat, axis=1)
-                    plt.plot(dose_mean, 100 * y, linestyle=style, color=colors[count], linewidth=width)
+                    if style == "dotted":
+                        ax.plot(dose_mean, 100 * y, linestyle=style, color=colors[count], linewidth=width)
+                    else:
+                        ax.plot(dose_mean, 100 * y, linestyle=style, color=colors[count], linewidth=width, legend=all_orgs[i])
                 elif not isinstance(plot_scenario, list):
                     plot_scenario = [plot_scenario]
 
@@ -166,7 +172,7 @@ class Visualization:
                             dose_sort_list[scene_num] = dose_sort_list[scene_num] / norm_factor
                             d_min_mat = d_min_mat / norm_factor
                             d_max_mat = d_max_mat / norm_factor
-                        plt.plot(dose_sort_list[scene_num], 100 * y, linestyle=style, color=colors[count], linewidth=width)
+                        ax.plot(dose_sort_list[scene_num], 100 * y, linestyle=style, color=colors[count], linewidth=width)
             count = count + 1
             # legend.append(all_orgs[i])
 
@@ -182,6 +188,7 @@ class Visualization:
         final_xmax = max(current_xlim[1], max_dose * 1.1)
         ax.set_xlim(0, final_xmax)
         ax.set_ylim(0, max_vol)
+        # ax.legend(legend, prop={'size': legend_font_size}, loc=legend_loc)
         ax.legend(prop={'size': legend_font_size}, loc=legend_loc)
         ax.grid(visible=True, which='major', color='#666666', linestyle='-')
 
