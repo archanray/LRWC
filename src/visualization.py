@@ -56,9 +56,6 @@ class Visualization:
         >>> Visualization.plot_dvh(my_plan, sol=sol, struct_names=['PTV', 'ESOPHAGUS'], dose_scale='Absolute(Gy)',volume_scale="Relative(%)", show=False, create_fig=True )
         """
 
-        plt.rcParams['font.size'] = 14
-        legend = []
-        
         if not isinstance(dose_1d_list, list):
             dose_1d_list = [dose_1d_list]
         if len(dose_1d_list) == 0:
@@ -108,7 +105,7 @@ class Visualization:
         all_orgs = my_plan.structures.structures_dict['name']
         # orgs = [struct.upper for struct in orgs]
         pres = my_plan.get_prescription()
-        # legend = []
+        legend = []
 
         if ax is None:
             fig, ax = plt.subplots(figsize=figsize)
@@ -148,20 +145,15 @@ class Visualization:
                 ax.set_ylabel('Volume Fraction ($\%$)', fontsize=fontsize)
             # ax.plot(x, 100 * y, linestyle=style, linewidth=width, color=colors[count])
 
-            # plt.plot(d_min_mat, 100 * y, linestyle='dotted', linewidth=width*0.5, color=colors[count])
-            # plt.plot(d_max_mat, 100 * y, linestyle='dotted', linewidth=width*0.5, color=colors[count])
+            # ax.plot(d_min_mat, 100 * y, linestyle='dotted', linewidth=width*0.5, color=colors[count])
+            # ax.plot(d_max_mat, 100 * y, linestyle='dotted', linewidth=width*0.5, color=colors[count])
             ax.fill_betweenx(100 * y, d_min_mat, d_max_mat, alpha=0.25, color=colors[count])
-            
-            # legend.append(all_orgs[i])
-            
+
             # Plot user-specified scenarios.
             if plot_scenario is not None:
                 if plot_scenario == 'mean':
                     dose_mean = np.mean(d_sort_mat, axis=1)
-                    if style == "dotted":
-                        ax.plot(dose_mean, 100 * y, linestyle=style, color=colors[count], linewidth=width)
-                    else:
-                        ax.plot(dose_mean, 100 * y, linestyle=style, color=colors[count], linewidth=width, legend=all_orgs[i])
+                    ax.plot(dose_mean, 100 * y, linestyle=style, color=colors[count], linewidth=width, label=all_orgs[i])
                 elif not isinstance(plot_scenario, list):
                     plot_scenario = [plot_scenario]
 
@@ -174,7 +166,7 @@ class Visualization:
                             d_max_mat = d_max_mat / norm_factor
                         ax.plot(dose_sort_list[scene_num], 100 * y, linestyle=style, color=colors[count], linewidth=width)
             count = count + 1
-            # legend.append(all_orgs[i])
+            legend.append(all_orgs[i])
 
         if show_criteria is not None:
             for s in range(len(show_criteria)):
@@ -188,9 +180,10 @@ class Visualization:
         final_xmax = max(current_xlim[1], max_dose * 1.1)
         ax.set_xlim(0, final_xmax)
         ax.set_ylim(0, max_vol)
+        handles, labels = ax.get_legend_handles_labels()
+        unique = [(h, l) for i, (h, l) in enumerate(zip(handles, labels)) if l not in labels[:i]]
+        ax.legend(*zip(*unique))
         # ax.legend(legend, prop={'size': legend_font_size}, loc=legend_loc)
-        if style == "solid":
-            ax.legend(prop={'size': legend_font_size}, loc=legend_loc)
         ax.grid(visible=True, which='major', color='#666666', linestyle='-')
 
         # Show the minor grid lines with very faint and almost transparent grey lines
