@@ -5,6 +5,7 @@ import argparse
 import configparser
 import portpy.photon as pp
 import numpy as np
+from bs4 import UnicodeDammit
 
 Config = configparser.ConfigParser()
 Config.read("config.ini")
@@ -104,10 +105,18 @@ values_to_find = ["number of non-zeros of the original matrix",
 
 values = np.zeros((len(files), len(values_to_find)))
 
+with open(files[0], "rb") as file_:
+    content = file_.read()
+file_encoding_format = UnicodeDammit(content).original_encoding
+print(file_encoding_format, type(file_encoding_format))
+
 for i in range(len(files)):
     file_ = files[i]
     print(file_)
-    file_pointer = open(file_, "r", encoding='utf-8')
+    with open(file_, "rb") as fp:
+        content = fp.read()
+    file_encoding_format = UnicodeDammit(content).original_encoding
+    file_pointer = open(file_, "r", encoding=file_encoding_format)
     contents = file_pointer.readlines()
     for j in range(len(values_to_find)):
         obs = find_vals(values_to_find[j], contents)
