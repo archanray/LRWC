@@ -166,7 +166,7 @@ class Visualization:
                             d_max_mat = d_max_mat / norm_factor
                         ax.plot(dose_sort_list[scene_num], 100 * y, linestyle=style, color=colors[count], linewidth=width)
             count = count + 1
-            legend.append(all_orgs[i])
+            # legend.append(all_orgs[i])
 
         if show_criteria is not None:
             for s in range(len(show_criteria)):
@@ -182,7 +182,7 @@ class Visualization:
         ax.set_ylim(0, max_vol)
         handles, labels = ax.get_legend_handles_labels()
         unique = [(h, l) for i, (h, l) in enumerate(zip(handles, labels)) if l not in labels[:i]]
-        ax.legend(*zip(*unique))
+        ax.legend(*zip(*unique), prop={'size': legend_font_size}, loc=legend_loc)
         # ax.legend(legend, prop={'size': legend_font_size}, loc=legend_loc)
         ax.grid(visible=True, which='major', color='#666666', linestyle='-')
 
