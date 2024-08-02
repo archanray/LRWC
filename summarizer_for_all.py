@@ -12,7 +12,7 @@ Config.read("config.ini")
 parser = argparse.ArgumentParser()
 
 parser.add_argument(
-    '--method', type=str, choices=['Naive', 'AHK06', 'AKL13', 'DZ11', 'RMR', 'modifiedBKKS21', 'heavyRMR'], help='The name of method.', default='RMR'
+    '--method', type=str, choices=['Naive', 'AHK06', 'AKL13', 'DZ11', 'RMR', 'modifiedBKKS21', 'heavyRMR'], help='The name of method.', default='modifiedBKKS21'
 )
 parser.add_argument(
     '--patient', type=str, help='Patient\'s name', default='Lung_Patient_5'
@@ -25,7 +25,7 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    '--samples', type=int, default=4000000, help="number of samples to grab"
+    '--samples', type=int, default=12000000, help="number of samples to grab"
 )
 
 args = parser.parse_args()
@@ -78,7 +78,7 @@ plt.savefig("Figures/dvhs/"+str(args.method) + "_" + str(args.threshold) + "_" +
 ############################################################# measurements #############################################################
 path = "./logs/"
 files = []
-header = "RMR_LP5_005_"
+header = "mBKKS21_LP5_12000000_"
 for i in os.listdir(path):
     if os.path.isfile(os.path.join(path,i)) and header in i:
         files.append(os.path.join(path,i))
