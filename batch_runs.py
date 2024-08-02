@@ -1,7 +1,7 @@
 import os
 
 for i in range(1,6):
-    command = "python main.py --method modifiedBKKS21 --patient Lung_Patient_5 --samples 9000000 --solver MOSEK 2>&1 | tee logs/mBKKS21_LP5_9000000_"+str(i)+".txt"
+    command = "python main.py --method RMR --patient Paraspinal_Patient_1 --threshold 0.05 --solver MOSEK 2>&1 | tee logs/mBKKS21_PS1_0.5_"+str(i)+".txt"
     os.system(command)
     
 os.system("git add .")

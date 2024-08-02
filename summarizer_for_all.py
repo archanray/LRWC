@@ -26,7 +26,7 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    '--samples', type=int, default=12000000, help="number of samples to grab"
+    '--samples', type=int, default=9000000, help="number of samples to grab"
 )
 
 args = parser.parse_args()
@@ -56,8 +56,12 @@ ct = pp.CT(data)
 structs = pp.Structures(data)
 beams = pp.Beams(data)
 # Pick a protocol
-# pats_prot = {'Lung_Patient_16': 'Lung_2Gy_30Fx', 'Paraspinal_Patient_1': 'Paraspinal_1Fx', 'Prostate_Patient_1': 'Prostate_26Fx'}
-protocol_name = 'Lung_2Gy_30Fx' # 
+pats_prot = {'Lung_Patient': 'Lung_2Gy_30Fx', 'Paraspinal_Patient': 'Paraspinal_1Fx', 'Prostate_Patient': 'Prostate_26Fx'}
+for key in pats_prot.keys():
+    if key in args.patient:
+        patient_key = key
+        break
+protocol_name = pats_prot[patient_key] #'Lung_2Gy_30Fx' #
 # Load clinical criteria for a specified protocol
 clinical_criteria = pp.ClinicalCriteria(data, protocol_name=protocol_name)
 # Load hyper-parameter values for optimization problem for a specified protocol
@@ -79,7 +83,7 @@ plt.savefig("Figures/dvhs/"+str(args.method) + "_" + str(args.threshold) + "_" +
 ############################################################# measurements #############################################################
 path = "./logs/"
 files = []
-header = "mBKKS21_LP5_12000000_"
+header = "mBKKS21_LP5_9000000_"
 for i in os.listdir(path):
     if os.path.isfile(os.path.join(path,i)) and header in i:
         files.append(os.path.join(path,i))

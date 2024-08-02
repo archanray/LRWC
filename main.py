@@ -88,8 +88,12 @@ if __name__ == '__main__':
     structs = pp.Structures(data)
     beams = pp.Beams(data)
     # Pick a protocol
-    # pats_prot = {'Lung_Patient_16': 'Lung_2Gy_30Fx', 'Paraspinal_Patient_1': 'Paraspinal_1Fx', 'Prostate_Patient_1': 'Prostate_26Fx'}
-    protocol_name = 'Lung_2Gy_30Fx' # 
+    pats_prot = {'Lung_Patient': 'Lung_2Gy_30Fx', 'Paraspinal_Patient': 'Paraspinal_1Fx', 'Prostate_Patient': 'Prostate_26Fx'}
+    for key in pats_prot.keys():
+        if key in args.patient:
+            patient_key = key
+            break
+    protocol_name = pats_prot[patient_key] #'Lung_2Gy_30Fx' # 
     # Load clinical criteria for a specified protocol
     clinical_criteria = pp.ClinicalCriteria(data, protocol_name=protocol_name)
     # Load hyper-parameter values for optimization problem for a specified protocol
