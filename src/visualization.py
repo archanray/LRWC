@@ -164,10 +164,7 @@ class Visualization:
                             dose_sort_list[scene_num] = dose_sort_list[scene_num] / norm_factor
                             d_min_mat = d_min_mat / norm_factor
                             d_max_mat = d_max_mat / norm_factor
-                        if style == "dotted":
-                            ax.plot(dose_sort_list[scene_num], 100 * y, linestyle=style, color=colors[count], linewidth=width)
-                        else:
-                            ax.plot(dose_sort_list[scene_num], 100 * y, linestyle=style, color=colors[count], linewidth=width, label=all_orgs[i])
+                        ax.plot(dose_sort_list[scene_num], 100 * y, linestyle=style, color=colors[count], linewidth=width, label=all_orgs[i])
             count = count + 1
             # legend.append(all_orgs[i])
 
