@@ -83,7 +83,7 @@ plt.savefig("Figures/dvhs/"+str(args.method) + "_" + str(args.threshold) + "_" +
 ############################################################# measurements #############################################################
 path = "./logs/"
 files = []
-header = "RMR_PS2_005_"
+header = "mBSSK21_PS2_3500000_"
 for i in os.listdir(path):
     if os.path.isfile(os.path.join(path,i)) and header in i:
         files.append(os.path.join(path,i))
