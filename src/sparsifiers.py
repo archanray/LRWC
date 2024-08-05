@@ -107,6 +107,8 @@ def RMR(matrix=np.zeros((100,100)), threshold=0.05, sparsify_op=True):
     """
     code from RMR
     """
+    threshold = threshold * np.max(matrix)
+    print("Cut-off threshold:", threshold)
     copy_matrix = matrix.copy()
     np.apply_along_axis(row_operation, 1, copy_matrix, threshold)
     # print("**************checking***************", copy_matrix.shape)
