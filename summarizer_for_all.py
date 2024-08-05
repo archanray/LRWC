@@ -13,10 +13,10 @@ Config.read("config.ini")
 parser = argparse.ArgumentParser()
 
 parser.add_argument(
-    '--method', type=str, choices=['Naive', 'AHK06', 'AKL13', 'DZ11', 'RMR', 'modifiedBKKS21', 'heavyRMR'], help='The name of method.', default='modifiedBKKS21'
+    '--method', type=str, choices=['Naive', 'AHK06', 'AKL13', 'DZ11', 'RMR', 'modifiedBKKS21', 'heavyRMR'], help='The name of method.', default='RMR'
 )
 parser.add_argument(
-    '--patient', type=str, help='Patient\'s name', default='Lung_Patient_5'
+    '--patient', type=str, help='Patient\'s name', default='Paraspinal_Patient_2'
 )
 parser.add_argument(
     '--threshold', type=float, help='The threshold using for the input of algorithm.', default=0.05
@@ -26,7 +26,7 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    '--samples', type=int, default=9000000, help="number of samples to grab"
+    '--samples', type=int, default=4000000, help="number of samples to grab"
 )
 
 args = parser.parse_args()
@@ -83,7 +83,7 @@ plt.savefig("Figures/dvhs/"+str(args.method) + "_" + str(args.threshold) + "_" +
 ############################################################# measurements #############################################################
 path = "./logs/"
 files = []
-header = "mBKKS21_LP5_9000000_"
+header = "RMR_PS2_005_"
 for i in os.listdir(path):
     if os.path.isfile(os.path.join(path,i)) and header in i:
         files.append(os.path.join(path,i))
