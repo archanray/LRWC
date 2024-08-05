@@ -13,7 +13,7 @@ Config.read("config.ini")
 parser = argparse.ArgumentParser()
 
 parser.add_argument(
-    '--method', type=str, choices=['Naive', 'AHK06', 'AKL13', 'DZ11', 'RMR', 'modifiedBKKS21', 'heavyRMR'], help='The name of method.', default='RMR'
+    '--method', type=str, choices=['Naive', 'AHK06', 'AKL13', 'DZ11', 'RMR', 'modifiedBKKS21', 'heavyRMR'], help='The name of method.', default='modifiedBKKS21'
 )
 parser.add_argument(
     '--patient', type=str, help='Patient\'s name', default='Paraspinal_Patient_2'
@@ -26,7 +26,7 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    '--samples', type=int, default=4000000, help="number of samples to grab"
+    '--samples', type=int, default=3500000, help="number of samples to grab"
 )
 
 args = parser.parse_args()
