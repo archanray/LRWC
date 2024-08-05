@@ -1,4 +1,4 @@
-Algorithm: RMR
+Algorithm: modifiedBKKS21
 Creating optimization structures.. It may take some time due to dilation
 C:\ProgramData\anaconda3\Lib\site-packages\portpy\photon\structures.py:336: RuntimeWarning: invalid value encountered in scalar divide
   self.structures_dict['fraction_of_vol_in_calc_box'].append(volume_cc_in_calc_box/volume_cc)
@@ -14,20 +14,19 @@ Objective done
 Constraints Start
 Constraints done
 number of non-zeros of the original matrix:  241886991
-Cut-off threshold: 0.05243034958839417
-number of non-zeros of the sparsed matrix:  3169451
-relative L2 norm (%):  6.882104277610779
+number of non-zeros of the sparsed matrix:  2630911
+relative L2 norm (%):  8.408008515834808
 Objective Start
 Objective done
 Constraints Start
 Constraints done
 Running Optimization..
-Optimal value: 66779.46730308572
-Elapsed time: 59.62518835067749 seconds
-feasibility violation: 115.92529688407365
+Optimal value: 67206.08631783076
+Elapsed time: 50.380589723587036 seconds
+feasibility violation: 94.90347098045218
 feasibility violation for PTV: 0.0
-objective function value: 570259293.6122538
-relative dose discrepancy (%):  4.991665871322348
-relative dose discrepancy of PTV (%):  2.9359120914849175
-min true dose for PTV: 13.854811098935985
-min approx dose for PTV: 13.999999810014518
+objective function value: 569767114.4482774
+relative dose discrepancy (%):  6.2307937687666275
+relative dose discrepancy of PTV (%):  2.304579282868832
+min true dose for PTV: 14.44842209114032
+min approx dose for PTV: 13.999998716362814
