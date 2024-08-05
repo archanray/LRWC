@@ -12,28 +12,22 @@ Done
 Objective Start
 Objective done
 Constraints Start
-Traceback (most recent call last):
-  File "C:\Users\raya2\Documents\LRWC\main.py", line 112, in <module>
-    opt_full.create_cvxpy_problem()
-  File "C:\ProgramData\anaconda3\Lib\site-packages\portpy\photon\optimization.py", line 150, in create_cvxpy_problem
-    constraints += [A[st.get_opt_voxels_idx(org), :] @ x <= limit / num_fractions]
-                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
-  File "C:\ProgramData\anaconda3\Lib\site-packages\cvxpy\expressions\expression.py", line 777, in __array_ufunc__
-    return ufunc_handler(self, args[0])
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\ProgramData\anaconda3\Lib\site-packages\cvxpy\expressions\expression.py", line 89, in <lambda>
-    np.matmul: lambda self, a: self.__rmatmul__(a),
-                               ^^^^^^^^^^^^^^^^^^^
-  File "C:\ProgramData\anaconda3\Lib\site-packages\cvxpy\expressions\expression.py", line 49, in cast_op
-    other = self.cast_to_const(other)
-            ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\ProgramData\anaconda3\Lib\site-packages\cvxpy\expressions\expression.py", line 564, in cast_to_const
-    return expr if isinstance(expr, Expression) else cvxtypes.constant()(expr)
-                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\ProgramData\anaconda3\Lib\site-packages\cvxpy\expressions\constants\constant.py", line 55, in __init__
-    self._value = intf.DEFAULT_INTF.const_to_matrix(value)
-                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\ProgramData\anaconda3\Lib\site-packages\cvxpy\interface\numpy_interface\ndarray_interface.py", line 56, in const_to_matrix
-    return result.astype(numpy.float64)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-numpy.core._exceptions._ArrayMemoryError: Unable to allocate 26.4 GiB for an array with shape (160298, 22122) and data type float64
+Constraints done
+number of non-zeros of the original matrix:  241886991
+Cut-off threshold: 0.05243034958839417
+number of non-zeros of the sparsed matrix:  3169852
+relative L2 norm (%):  6.875155866146088
+Objective Start
+Objective done
+Constraints Start
+Constraints done
+Running Optimization..
+Optimal value: 67646.9956521832
+Elapsed time: 50.30809545516968 seconds
+feasibility violation: 111.31712453148084
+feasibility violation for PTV: 0.0
+objective function value: 570158188.9993889
+relative dose discrepancy (%):  5.021688349196611
+relative dose discrepancy of PTV (%):  2.920968350201804
+min true dose for PTV: 13.601955642219524
+min approx dose for PTV: 13.999999722145645

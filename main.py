@@ -25,7 +25,8 @@ def objective_function_value(x):
                 struct = obj_funcs[i]['structure_name']
                 if len(inf_matrix_full.get_opt_voxels_idx(struct)) == 0:  # check if there are any opt voxels for the structure
                     continue
-                dose_gy = opt.get_num(obj_funcs[i]['dose_gy']) / clinical_criteria.get_num_of_fractions()
+                key = opt.matching_keys(obj_funcs[i], 'dose')
+                dose_gy = opt.dose_to_gy(key, obj_funcs[i][key]) / clinical_criteria.get_num_of_fractions()
                 dO = np.maximum(A[inf_matrix_full.get_opt_voxels_idx(struct), :] @ x - dose_gy, 0)
                 obj += (1 / len(inf_matrix_full.get_opt_voxels_idx(struct))) * (obj_funcs[i]['weight'] * np.sum(dO ** 2))
         elif obj_funcs[i]['type'] == 'quadratic-underdose':
@@ -33,7 +34,8 @@ def objective_function_value(x):
                 struct = obj_funcs[i]['structure_name']
                 if len(inf_matrix_full.get_opt_voxels_idx(struct)) == 0:
                     continue
-                dose_gy = opt.get_num(obj_funcs[i]['dose_gy']) / clinical_criteria.get_num_of_fractions()
+                key = opt.matching_keys(obj_funcs[i], 'dose')
+                dose_gy = opt.get_num(obj_funcs[i][key]) / clinical_criteria.get_num_of_fractions()
                 dU = np.minimum(A[inf_matrix_full.get_opt_voxels_idx(struct), :] @ x - dose_gy, 0)
                 obj += (1 / len(inf_matrix_full.get_opt_voxels_idx(struct))) * (obj_funcs[i]['weight'] * np.sum(dU ** 2))
         elif obj_funcs[i]['type'] == 'quadratic':
