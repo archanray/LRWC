@@ -1,0 +1,29 @@
+Algorithm: modifiedBKKS21
+Creating optimization structures.. It may take some time due to dilation
+C:\ProgramData\anaconda3\Lib\site-packages\portpy\photon\structures.py:336: RuntimeWarning: invalid value encountered in scalar divide
+  self.structures_dict['fraction_of_vol_in_calc_box'].append(volume_cc_in_calc_box/volume_cc)
+Optimization structures created!!
+Creating BEV..
+Loading full influence matrix..
+Done
+Creating BEV..
+Loading sparse influence matrix...
+Done
+Objective Start
+Objective done
+Constraints Start
+Constraints done
+dimensions of input matrix: (757166, 5281)
+number of non-zeros of the original matrix:  1400095652
+12 3200000
+Traceback (most recent call last):
+  File "C:\Users\raya2\Documents\LRWC\main.py", line 132, in <module>
+    B = method(data=A, size=args.samples)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\raya2\Documents\LRWC\src\sparsifiers.py", line 21, in modifiedBKKS21
+    p3 = np.zeros_like(data)
+         ^^^^^^^^^^^^^^^^^^^
+  File "C:\ProgramData\anaconda3\Lib\site-packages\numpy\core\numeric.py", line 129, in zeros_like
+    res = empty_like(a, dtype=dtype, order=order, subok=subok, shape=shape)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+numpy.core._exceptions._ArrayMemoryError: Unable to allocate 14.9 GiB for an array with shape (757166, 5281) and data type float32

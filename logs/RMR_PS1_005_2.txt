@@ -1,0 +1,34 @@
+Algorithm: RMR
+Creating optimization structures.. It may take some time due to dilation
+C:\ProgramData\anaconda3\Lib\site-packages\portpy\photon\structures.py:336: RuntimeWarning: invalid value encountered in scalar divide
+  self.structures_dict['fraction_of_vol_in_calc_box'].append(volume_cc_in_calc_box/volume_cc)
+Optimization structures created!!
+Creating BEV..
+Loading full influence matrix..
+Done
+Creating BEV..
+Loading sparse influence matrix...
+Done
+Objective Start
+Objective done
+Constraints Start
+Constraints done
+dimensions of input matrix: (757166, 5281)
+number of non-zeros of the original matrix:  1400095652
+Cut-off threshold: 1.2846327781677247
+number of non-zeros of the sparsed matrix:  12142060
+relative L2 norm (%):  8.717094361782074
+Objective Start
+Objective done
+Constraints Start
+Constraints done
+Running Optimization..
+Optimal value: 107907.20909302265
+Elapsed time: 393.11857509613037 seconds
+feasibility violation: 157.01731430210853
+feasibility violation for PTV: 0.0
+objective function value: 571516887.4551485
+relative dose discrepancy (%):  6.165929359088771
+relative dose discrepancy of PTV (%):  2.6874327705364967
+min true dose for PTV: 11.988573629636889
+min approx dose for PTV: 13.99999822675283

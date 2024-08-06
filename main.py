@@ -114,6 +114,7 @@ if __name__ == '__main__':
     opt_full.create_cvxpy_problem()
 
     A = inf_matrix_full.A
+    print("dimensions of input matrix:", A.shape)
     print("number of non-zeros of the original matrix: ", len(A.nonzero()[0]))
     
     if args.method != "modifiedBKKS21-123":
