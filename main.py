@@ -119,11 +119,13 @@ if __name__ == '__main__':
     if args.method != "modifiedBKKS21-123":
         method = getattr(algorithms, args.method)
     else:
+        print("first")
         method = getattr(algorithms, "modifiedBKKS21")
     
     if args.method != "modifiedBKKS21":
         B = method(A, args.threshold)
     elif args.method == "modifiedBKKS21-123":
+        print("second")
         B = method(data=A, size=args.samples, mode="123")
     else:
         B = method(data=A, size=args.samples)

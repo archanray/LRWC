@@ -9,6 +9,7 @@ def modifiedBKKS21(data=np.zeros((100,100)), size=10, mode="12", row_norm_preser
     """
     code by Archan
     """
+    print(mode, size)
     n = len(data)
     # the divisors are off-setwith eps to make things go faster
     eps = 1e-30
