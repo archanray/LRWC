@@ -1,0 +1,21 @@
+Algorithm: noSparse
+Creating optimization structures.. It may take some time due to dilation
+C:\ProgramData\anaconda3\Lib\site-packages\portpy\photon\structures.py:336: RuntimeWarning: invalid value encountered in scalar divide
+  self.structures_dict['fraction_of_vol_in_calc_box'].append(volume_cc_in_calc_box/volume_cc)
+Optimization structures created!!
+Creating BEV..
+Loading full influence matrix..
+Done
+Creating BEV..
+Loading sparse influence matrix...
+Done
+Objective Start
+Objective done
+Constraints Start
+Constraints done
+number of non-zeros of the original matrix:  241886991
+Traceback (most recent call last):
+  File "C:\Users\raya2\Documents\LRWC\main.py", line 122, in <module>
+    method = getattr(algorithms, "modifiedBKKS21")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: noSparse() takes 1 positional argument but 2 were given

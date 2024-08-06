@@ -1,4 +1,5 @@
 import numpy as np
+import scipy.sparse
 from src.utils import sample_index
 import math
 import scipy
@@ -236,3 +237,7 @@ def heavyRMR(matrix, threshold, max_samples=4000000, sparsify_op=True):
         copy_matrix = scipy.sparse.csr_matrix(copy_matrix)
 
     return copy_matrix
+
+def noSparse(matrix):
+    matrix = scipy.sparse.csr_matrix(matrix)
+    return matrix

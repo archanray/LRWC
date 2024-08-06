@@ -61,7 +61,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
     parser.add_argument(
-        '--method', type=str, choices=['Naive', 'AHK06', 'AKL13', 'DZ11', 'RMR', 'modifiedBKKS21', 'heavyRMR'], help='The name of method.', default='RMR'
+        '--method', type=str, choices=['Naive', 'AHK06', 'AKL13', 'DZ11', 'RMR', 'modifiedBKKS21', 'modifiedBKKS21-123', 'heavyRMR', 'noSparse'], help='The name of method.', default='RMR'
     )
     parser.add_argument(
         '--patient', type=str, help='Patient\'s name', default='Lung_Patient_5'
@@ -116,12 +116,17 @@ if __name__ == '__main__':
     A = inf_matrix_full.A
     print("number of non-zeros of the original matrix: ", len(A.nonzero()[0]))
     
-    method = getattr(algorithms, args.method)
+    if args.method != "modifiedBKKS21-123":
+        method = getattr(algorithms, args.method)
+    else:
+        method = getattr(algorithms, "modifiedBKKS21")
     
     if args.method != "modifiedBKKS21":
         B = method(A, args.threshold)
+    elif args.method == "modifiedBKKS21-123":
+        B = method(data=A, size=args.samples, mode="123")
     else:
-        B = method(A, args.samples)
+        B = method(data=A, size=args.samples)
     print("number of non-zeros of the sparsed matrix: ", len(B.nonzero()[0]))
     print("relative L2 norm (%): ", l2_norm(A - B) / l2_norm(A) * 100)
 
