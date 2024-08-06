@@ -14,8 +14,19 @@ Objective done
 Constraints Start
 Constraints done
 number of non-zeros of the original matrix:  241886991
-Traceback (most recent call last):
-  File "C:\Users\raya2\Documents\LRWC\main.py", line 122, in <module>
-    method = getattr(algorithms, "modifiedBKKS21")
-        ^^^^^^^^^^^^^^^^^^^^^^^^^
-TypeError: noSparse() takes 1 positional argument but 2 were given
+number of non-zeros of the sparsed matrix:  241886991
+relative L2 norm (%):  0.0
+Objective Start
+Objective done
+Constraints Start
+Constraints done
+Running Optimization..
+Optimal value: 79897.3440573845
+Elapsed time: 4223.989193677902 seconds
+feasibility violation: 0.0
+feasibility violation for PTV: 0.0
+objective function value: 569998494.9201419
+relative dose discrepancy (%):  1.4908595176136725e-13
+relative dose discrepancy of PTV (%):  1.5393040033277489e-13
+min true dose for PTV: 13.999999737848135
+min approx dose for PTV: 13.999999737848128

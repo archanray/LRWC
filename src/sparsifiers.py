@@ -238,6 +238,6 @@ def heavyRMR(matrix, threshold, max_samples=4000000, sparsify_op=True):
 
     return copy_matrix
 
-def noSparse(matrix):
+def noSparse(matrix, threshold=0.0):
     matrix = scipy.sparse.csr_matrix(matrix)
     return matrix
