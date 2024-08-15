@@ -76,6 +76,14 @@ if __name__ == '__main__':
     parser.add_argument(
         '--samples', type=int, default=4000000, help="number of samples to grab"
     )
+    
+    parser.add_argument(
+        '--samples_percent', type=float, default=100, help="number of samples to grab"
+    )
+    
+    parser.add_argument(
+        '--split', type=float, default=100, help="number of samples to grab"
+    )
 
     args = parser.parse_args()
     
@@ -90,7 +98,7 @@ if __name__ == '__main__':
     structs = pp.Structures(data)
     beams = pp.Beams(data)
     # Pick a protocol
-    pats_prot = {'Lung_Patient': 'Lung_2Gy_30Fx', 'Paraspinal_Patient': 'Paraspinal_1Fx', 'Prostate_Patient': 'Prostate_26Fx'}
+    pats_prot = {'Lung_Patient': 'Lung_2Gy_30Fx', 'Paraspinal_Patient': 'Paraspinal_1Fx', 'Prostate_Patient': 'Prostate_5Gy_5Fx'}
     for key in pats_prot.keys():
         if key in args.patient:
             patient_key = key
@@ -117,6 +125,9 @@ if __name__ == '__main__':
     print("dimensions of input matrix:", A.shape)
     print("number of non-zeros of the original matrix: ", len(A.nonzero()[0]))
     
+    if args.samples_percent != 100:
+        args.samples = int(len(A.nonzero()[0]) * args.samples_percent / 100)
+        
     if args.method != "modifiedBKKS21-123":
         method = getattr(algorithms, args.method)
     else:

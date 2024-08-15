@@ -76,8 +76,8 @@ plan_full = pp.Plan(ct=ct, structs=structs, beams=beams, inf_matrix=inf_matrix_f
 
 struct_names = ['PTV', 'ESOPHAGUS', 'HEART', 'CORD']
 fig, ax = plt.subplots(figsize=(12, 8))
-ax = Visualization.plot_robust_dvh(plan_full, dose_1d_list=dose_1ds , struct_names=struct_names, style='solid', ax=ax, norm_flag=True, font_size=14, plot_scenario='mean')
-ax = Visualization.plot_robust_dvh(plan_full, dose_1d_list=dose_fulls, struct_names=struct_names, style='dotted', ax=ax, norm_flag=True, font_size=14, plot_scenario='mean' )
+ax = Visualization.plot_robust_dvh(plan_full, dose_1d_list=dose_fulls, struct_names=struct_names, style='solid', ax=ax, norm_flag=True, font_size=14, plot_scenario='mean')
+ax = Visualization.plot_robust_dvh(plan_full, dose_1d_list=dose_1ds , struct_names=struct_names, style='dotted', ax=ax, norm_flag=True, font_size=14, plot_scenario='mean')
 plt.savefig("Figures/dvhs/"+str(args.method) + "_" + str(args.threshold) + "_" + str(args.patient) + "_" + str(args.samples) + ".pdf")
 
 ############################################################# measurements #############################################################
