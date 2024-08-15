@@ -13,10 +13,10 @@ Config.read("config.ini")
 parser = argparse.ArgumentParser()
 
 parser.add_argument(
-    '--method', type=str, choices=['Naive', 'AHK06', 'AKL13', 'DZ11', 'RMR', 'modifiedBKKS21', 'modifiedBKKS21-123', 'heavyRMR', 'noSparse'], help='The name of method.', default='noSparse'
+    '--method', type=str, choices=['Naive', 'AHK06', 'AKL13', 'DZ11', 'RMR', 'modifiedBKKS21', 'modifiedBKKS21-123', 'heavyRMR', 'noSparse'], help='The name of method.', default='RMR'
 )
 parser.add_argument(
-    '--patient', type=str, help='Patient\'s name', default='Paraspinal_Patient_2'
+    '--patient', type=str, help='Patient\'s name', default='Paraspinal_Patient_1'
 )
 parser.add_argument(
     '--threshold', type=float, help='The threshold using for the input of algorithm.', default=0.05
@@ -83,7 +83,7 @@ plt.savefig("Figures/dvhs/"+str(args.method) + "_" + str(args.threshold) + "_" +
 ############################################################# measurements #############################################################
 path = "./logs/"
 files = []
-header = "nS_PS2_"
+header = "RMR_PS1_005_"
 for i in os.listdir(path):
     if os.path.isfile(os.path.join(path,i)) and header in i:
         files.append(os.path.join(path,i))

@@ -1,0 +1,33 @@
+Algorithm: modifiedBKKS21
+Creating optimization structures.. It may take some time due to dilation
+C:\ProgramData\anaconda3\Lib\site-packages\portpy\photon\structures.py:336: RuntimeWarning: invalid value encountered in scalar divide
+  self.structures_dict['fraction_of_vol_in_calc_box'].append(volume_cc_in_calc_box/volume_cc)
+Optimization structures created!!
+Creating BEV..
+Loading full influence matrix..
+Done
+Creating BEV..
+Loading sparse influence matrix...
+Done
+Objective Start
+Objective done
+Constraints Start
+Constraints done
+dimensions of input matrix: (757166, 5281)
+number of non-zeros of the original matrix:  1400095652
+number of non-zeros of the sparsed matrix:  12478130
+relative L2 norm (%):  8.578094840049744
+Objective Start
+Objective done
+Constraints Start
+Constraints done
+Running Optimization..
+Optimal value: 106985.09647364904
+Elapsed time: 510.83421301841736 seconds
+feasibility violation: 119.42338732590669
+feasibility violation for PTV: 0.0
+objective function value: 572202789.8143884
+relative dose discrepancy (%):  7.229229178612289
+relative dose discrepancy of PTV (%):  1.8807034115501058
+min true dose for PTV: 12.044485908683022
+min approx dose for PTV: 13.999999260728861

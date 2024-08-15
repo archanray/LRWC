@@ -1,7 +1,7 @@
 import numpy as np
 from tqdm import tqdm
 from src.get_data_matrices import loadData
-from src.sparsifiers import modifiedBKKS21, RMR, AHK06, AKL13, DZ11, AHK06_true
+from src.sparsifiers import modifiedBKKS21, RMR, AHK06, AKL13, DZ11, AHK06_true, modifiedBKKS21MemoryIntensive
 import os, pickle
 import matplotlib
 import matplotlib.pyplot as plt
@@ -13,9 +13,9 @@ class TestMethods:
         if name == "prob-abs":
             return functools.partial(modifiedBKKS21,mode="1")
         if name == "prob-abs+row":
-            return functools.partial(modifiedBKKS21,mode="12", row_norm_preserve=False)
+            return functools.partial(modifiedBKKS21,mode="12", row_norm_preserve=False, sparsify_op=False)
         if name == "prob-abs+row+sum":
-            return functools.partial(modifiedBKKS21,mode="12", row_norm_preserve=True)
+            return functools.partial(modifiedBKKS21,mode="12", row_norm_preserve=True, sparsify_op=False)
         if name == "prob-abs+row+col":
             return functools.partial(modifiedBKKS21,mode="123")
         if name == "prob-row":
@@ -30,11 +30,13 @@ class TestMethods:
             return functools.partial(DZ11)
         if name == "AKL13":
             return functools.partial(AKL13)
+        if name == "modifiedBKKS21MemoryIntensive":
+            return functools.partial(modifiedBKKS21MemoryIntensive, mode="12", row_norm_preserve=False, sparsify_op=False)
         return None
     
     def matrixSparsifier(self, data_matrix, A_norm, sample_sizes, method, log_scaled=True):
         # parameters for experiments
-        trials = 5
+        trials = 20
         errors_per_trial = np.zeros((trials, len(sample_sizes))).astype(float)
         samples = np.zeros_like(errors_per_trial)
         
@@ -67,7 +69,7 @@ class TestMethods:
     
     def matrixSparsifierTh(self, data_matrix, A_norm, thresholds, method, log_scaled=True):
         # parameters for experiments
-        trials = 5
+        trials = 20
         errors_per_trial = np.zeros((trials, len(thresholds))).astype(float)
         samples = np.zeros_like(errors_per_trial)
         
@@ -161,7 +163,7 @@ class TestMethods:
         # thresholds for RMR
         # thresholds = np.arange(0.5, 0.2, -0.02)
         thresholds = np.arange(0.8, 0.5, -0.02)
-        if len(methods) == 1 and "prob-abs+row+col" in methods:
+        if "RMR" not in methods or "AHK06" not in methods:
             sample_sizes = np.arange(500,1000,100).astype(int)
         else:
             sample_sizes = np.zeros_like(thresholds).astype(int)
@@ -236,7 +238,7 @@ class TestMethods:
         return None
 
 if __name__ == "__main__":
-    algos = ["AHK06", "RMR", "prob-abs+row", "prob-abs+row+sum"] # ["AHK06", "RMR", "prob-abs", "prob-abs+row", "prob-abs+row+col", "AKL13"]#, "prob-row"]
+    algos = ["prob-abs+row", "modifiedBKKS21MemoryIntensive"] # ["AHK06", "RMR", "prob-abs", "prob-abs+row", "prob-abs+row+col", "AKL13"]#, "prob-row"]
     # loader = [True, True, True, True] # len shouldbe +1 for baseline
     loader = [False]*len(algos)
     # loader[-1] = False

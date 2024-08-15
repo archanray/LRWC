@@ -4,8 +4,83 @@ from src.utils import sample_index
 import math
 import scipy
 from src.utils import fast_spectral_norm
+from copy import copy
+
+def rowWiseSampler(data_row, norms_ds, size, idx):    
+    sparse_row = np.zeros_like(data_row)
+    p1 = np.zeros_like(data_row)
+    p2 = np.zeros_like(data_row)
+    p3 = np.zeros_like(data_row)
+    p4 = np.zeros_like(data_row)
+    
+    if "1" in norms_ds["mode"]:
+        p1 = np.abs(data_row) / norms_ds["sum_abs_data"]
+    if "2" in norms_ds["mode"]:
+        p2 = (np.abs(data_row) / norms_ds["ell_one_row_norms"][idx]) * \
+            (norms_ds["ell_one_row_norms_squared"][idx] / np.sum(norms_ds["ell_one_row_norms_squared"]))
+    if "3" in norms_ds["mode"]:
+        p3 = (np.abs(data_row) / norms_ds["ell_one_col_norms"]) * \
+            (norms_ds["ell_one_col_norms_squared"] / np.sum(norms_ds["ell_one_col_norms_squared"]))
+    if "4" in norms_ds["mode"]:
+        p4 = (np.abs(data_row) / norms_ds["sum_abs_data"]) * \
+            (norms_ds["ell_one_row_norms_squared"][idx] / np.sum(norms_ds["ell_one_row_norms_squared"]))
+    
+    pij_alpha = np.maximum(np.maximum(np.maximum(p1, p2), p3), p4)
+    pij_alpha = np.minimum(1, size*pij_alpha)
+    index_flags = np.random.rand(*pij_alpha.shape)< pij_alpha 
+    
+    sparse_row[index_flags] = data_row[index_flags] / (pij_alpha[index_flags])
+    
+    return sparse_row
+    
 
 def modifiedBKKS21(data=np.zeros((100,100)), size=10, mode="12", row_norm_preserve=True, row_norm_preserve_type="total", sparsify_op=True):
+    n = len(data)
+    # the divisors are off-setwith eps to make things go faster
+    eps = 1e-30
+    # init sparse matrix
+    sparse_data = np.zeros_like(data)
+    
+    if row_norm_preserve:
+        if row_norm_preserve_type == "total":
+            total_row_sums = np.sum(data, axis=1)
+    
+    norms_ds = {}
+    #ell_1 row norms
+    norms_ds["ell_one_row_norms"] = np.linalg.norm(data, ord=1, axis=1) + eps
+    norms_ds["ell_one_row_norms_squared"] =  norms_ds["ell_one_row_norms"] ** 2 + eps
+    
+    # ell_1 col norms
+    norms_ds["ell_one_col_norms"] = np.linalg.norm(data, ord=1, axis=0) + eps
+    norms_ds["ell_one_col_norms_squared"] =  norms_ds["ell_one_col_norms"] ** 2 + eps
+    
+    norms_ds["sum_abs_data"] = np.sum(np.abs(data)) 
+    norms_ds["mode"] = mode
+    
+    for idx in range(len(data)):
+        # sample elements per row to avoid running out of memory
+        sparse_data[idx, :] = rowWiseSampler(data[idx, :], norms_ds, size, idx)
+    
+    if row_norm_preserve:
+        if row_norm_preserve_type == "total":
+            sparse_total_row_sums = np.sum(sparse_data, axis=1)
+            sparse_nnz_per_rows = np.count_nonzero(sparse_data, axis=1)
+            left_overs = total_row_sums - sparse_total_row_sums
+            adjustments_per_row = np.zeros_like(left_overs)
+            # divide only possible for rows with at least one non-zero
+            adjustments_per_row[sparse_nnz_per_rows > 0] = left_overs[sparse_nnz_per_rows > 0] / sparse_nnz_per_rows[sparse_nnz_per_rows > 0] # elementwise divide
+            # print(len(left_overs), len(adjustments_per_row), len(sparse_data))
+            for i in range(len(sparse_data)):
+                q = sparse_data[i,:]
+                q[np.abs(q) > 0] = q[np.abs(q) > 0]+adjustments_per_row[i]
+                sparse_data[i,:] = q
+    
+    if sparsify_op:
+        sparse_data = scipy.sparse.csr_matrix(sparse_data)
+    
+    return sparse_data
+
+def modifiedBKKS21MemoryIntensive(data=np.zeros((100,100)), size=10, mode="12", row_norm_preserve=True, row_norm_preserve_type="total", sparsify_op=True):
     """
     code by Archan
     """
