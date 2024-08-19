@@ -80,6 +80,10 @@ def modifiedBKKS21(data=np.zeros((100,100)), size=10, mode="12", row_norm_preser
     
     return sparse_data
 
+def thresholdedBKKS21(data=np.zeros((100,100)), size=10, mode="12", row_norm_preserve=True, row_norm_preserve_type="total", sparsify_op=True, split_ratio=10):
+    
+    return
+
 def modifiedBKKS21MemoryIntensive(data=np.zeros((100,100)), size=10, mode="12", row_norm_preserve=True, row_norm_preserve_type="total", sparsify_op=True):
     """
     code by Archan
