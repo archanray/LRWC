@@ -61,7 +61,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
     parser.add_argument(
-        '--method', type=str, choices=['Naive', 'AHK06', 'AKL13', 'DZ11', 'RMR', 'modifiedBKKS21', 'modifiedBKKS21-123', 'heavyRMR', 'noSparse'], help='The name of method.', default='RMR'
+        '--method', type=str, choices=['Naive', 'AHK06', 'AKL13', 'DZ11', 'RMR', 'modifiedBKKS21', 'modifiedBKKS21-123', 'heavyRMR', 'noSparse', 'thresholdedBKKS21'], help='The name of method.', default='RMR'
     )
     parser.add_argument(
         '--patient', type=str, help='Patient\'s name', default='Lung_Patient_5'
@@ -181,7 +181,7 @@ if __name__ == '__main__':
     if not os.path.isdir(folder):
         os.makedirs(folder)
     timestr = time.strftime("%Y%m%d-%H%M%S")    
-    savefilename = folder+"/"+str(args.patient)+"_"+str(args.method)+"_"+str(args.threshold)+"_"+str(args.samples_percent)+"_"+str(args.split)+"_"+str(args.split_type)+"_"+str(timestr)+".pkl"
+    savefilename = folder+"/"+str(args.patient)+"_"+str(args.method)+"_"+str(args.threshold)+"_"+str(args.samples)+"_"+str(args.samples_percent)+"_"+str(args.split)+"_"+str(args.split_type)+"_"+str(timestr)+".pkl"
     file_handler = open(savefilename, "wb")
     pickle.dump([dose_1d, dose_full], file_handler)
     file_handler.close()

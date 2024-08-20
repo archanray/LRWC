@@ -3,7 +3,7 @@ import scipy.sparse
 from src.utils import sample_index
 import math
 import scipy
-from src.utils import fast_spectral_norm
+from src.utils import fast_spectral_norm, find_threshold
 from copy import copy
 
 def rowWiseSampler(data_row, norms_ds, size, idx):    
@@ -81,26 +81,48 @@ def modifiedBKKS21(data=np.zeros((100,100)), size=10, mode="12", row_norm_preser
     
     return sparse_data
 
+def thresholdPerRow(data_row, threshold, sum_mode):
+    d = len(data_row)
+    sorted_row = np.sort(data_row)
+    if sum_mode == "ell_one":
+        sum_mode_adjusted_sorted_row = np.abs(sorted_row)
+    if sum_mode == "ell_two":
+        sum_mode_adjusted_sorted_row = sorted_row**2
+    budget = threshold
+    for i in range(d-1,-1,-1):
+        if budget-sum_mode_adjusted_sorted_row[i] >= 0:
+            budget = budget-sum_mode_adjusted_sorted_row
+        else:
+            break
+    if i > 0:
+        row_val_threshold = sorted_row[i]
+        data_row[data_row <= row_val_threshold] = 0
+
 def thresholdedBKKS21(data=np.zeros((100,100)), size=10, mode="12", row_norm_preserve=True, row_norm_preserve_type="total", sparsify_op=True, split_ratio=10, thresholdingAlgo="infinity"):
     threshSamples = int(split_ratio*size / 100) # to be used by the thresholding algorithm
     leftoverSamples = size - threshSamples # to be used by the sampling algorithm
     keep_data = copy(data)
     # first run the thresholding algo
     if thresholdingAlgo == "infinity":
-        threshold = data.flatten().sort()[-threshSamples]
+        threshold = np.sort(data.flatten())[-threshSamples]
         keep_data[keep_data < threshold] = 0
-    if threshold == "ell_one":
+    if thresholdingAlgo == "ell_one":
         # threshold using ell one norm of each row
+        row_sum_threshold = find_threshold(data, threshSamples, sum_mode=thresholdingAlgo)
+        np.apply_along_axis(thresholdPerRow, 1, keep_data, row_sum_threshold, thresholdingAlgo)
         pass
-    if threshold == "ell_two":
+    if thresholdingAlgo == "ell_two":
         # threshold using ell two norm of each row
+        row_sum_threshold = find_threshold(data, threshSamples, sum_mode=thresholdingAlgo)
+        np.apply_along_axis(thresholdPerRow, 1, keep_data, row_sum_threshold, thresholdingAlgo)
         pass
+    
+    # take the residual and run the sampling algorithm and combine results
+    keep_data = keep_data + modifiedBKKS21(data=data - keep_data, size=leftoverSamples, mode=mode, row_norm_preserve=row_norm_preserve, row_norm_preserve_type=row_norm_preserve_type, sparsify_op=False)
     
     if sparsify_op:
         keep_data = scipy.sparse.csr_matrix(keep_data)
-    # take the residual and run the sampling algorithm and combine results
-    keep_data += modifiedBKKS21(data=data - keep_data, size=leftoverSamples, mode=mode, row_norm_preserve=row_norm_preserve, row_norm_preserve_type=row_norm_preserve_type, sparsify_op=sparsify_op)
-    
+        
     return keep_data
 
 def modifiedBKKS21MemoryIntensive(data=np.zeros((100,100)), size=10, mode="12", row_norm_preserve=True, row_norm_preserve_type="total", sparsify_op=True):
