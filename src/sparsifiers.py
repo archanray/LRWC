@@ -62,6 +62,7 @@ def modifiedBKKS21(data=np.zeros((100,100)), size=10, mode="12", row_norm_preser
         sparse_data[idx, :] = rowWiseSampler(data[idx, :], norms_ds, size, idx)
     
     if row_norm_preserve:
+        # need to extend these to several other types of row norm preserving techniques
         if row_norm_preserve_type == "total":
             sparse_total_row_sums = np.sum(sparse_data, axis=1)
             sparse_nnz_per_rows = np.count_nonzero(sparse_data, axis=1)
@@ -80,9 +81,27 @@ def modifiedBKKS21(data=np.zeros((100,100)), size=10, mode="12", row_norm_preser
     
     return sparse_data
 
-def thresholdedBKKS21(data=np.zeros((100,100)), size=10, mode="12", row_norm_preserve=True, row_norm_preserve_type="total", sparsify_op=True, split_ratio=10):
+def thresholdedBKKS21(data=np.zeros((100,100)), size=10, mode="12", row_norm_preserve=True, row_norm_preserve_type="total", sparsify_op=True, split_ratio=10, thresholdingAlgo="infinity"):
+    threshSamples = int(split_ratio*size / 100) # to be used by the thresholding algorithm
+    leftoverSamples = size - threshSamples # to be used by the sampling algorithm
+    keep_data = copy(data)
+    # first run the thresholding algo
+    if thresholdingAlgo == "infinity":
+        threshold = data.flatten().sort()[-threshSamples]
+        keep_data[keep_data < threshold] = 0
+    if threshold == "ell_one":
+        # threshold using ell one norm of each row
+        pass
+    if threshold == "ell_two":
+        # threshold using ell two norm of each row
+        pass
     
-    return
+    if sparsify_op:
+        keep_data = scipy.sparse.csr_matrix(keep_data)
+    # take the residual and run the sampling algorithm and combine results
+    keep_data += modifiedBKKS21(data=data - keep_data, size=leftoverSamples, mode=mode, row_norm_preserve=row_norm_preserve, row_norm_preserve_type=row_norm_preserve_type, sparsify_op=sparsify_op)
+    
+    return keep_data
 
 def modifiedBKKS21MemoryIntensive(data=np.zeros((100,100)), size=10, mode="12", row_norm_preserve=True, row_norm_preserve_type="total", sparsify_op=True):
     """

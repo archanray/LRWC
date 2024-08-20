@@ -84,6 +84,10 @@ if __name__ == '__main__':
     parser.add_argument(
         '--split', type=float, default=100, help="number of samples to grab"
     )
+    
+    parser.add_argument(
+        '--split_type', type=str, default="infinity", help="number of samples to grab"
+    )
 
     args = parser.parse_args()
     
@@ -128,19 +132,20 @@ if __name__ == '__main__':
     if args.samples_percent != 100:
         args.samples = int(len(A.nonzero()[0]) * args.samples_percent / 100)
         
-    if args.method != "modifiedBKKS21-123":
-        method = getattr(algorithms, args.method)
-    else:
-        print("first")
+    if args.method == "modifiedBKKS21-123":
         method = getattr(algorithms, "modifiedBKKS21")
-    
-    if args.method != "modifiedBKKS21":
-        B = method(A, args.threshold)
-    elif args.method == "modifiedBKKS21-123":
-        print("second")
-        B = method(data=A, size=args.samples, mode="123")
     else:
+        method = getattr(algorithms, args.method)
+    
+    if args.method == "modifiedBKKS21":
         B = method(data=A, size=args.samples)
+    elif args.method == "modifiedBKKS21-123":
+        B = method(data=A, size=args.samples, mode="123")
+    elif args.method == "thresholdedBKKS21":
+        B = method(data=A, size=args.samples, split_ratio=args.split, thresholdingAlgo=args.split_type)
+    else:
+        B = method(A, args.threshold)
+        
     print("number of non-zeros of the sparsed matrix: ", len(B.nonzero()[0]))
     print("relative L2 norm (%): ", l2_norm(A - B) / l2_norm(A) * 100)
 
@@ -176,7 +181,7 @@ if __name__ == '__main__':
     if not os.path.isdir(folder):
         os.makedirs(folder)
     timestr = time.strftime("%Y%m%d-%H%M%S")    
-    savefilename = folder+"/"+str(args.patient)+"_"+str(args.method)+"_"+str(args.threshold)+"_"+str(args.samples)+"_"+str(timestr)+".pkl"
+    savefilename = folder+"/"+str(args.patient)+"_"+str(args.method)+"_"+str(args.threshold)+"_"+str(args.samples_percent)+"_"+str(args.split)+"_"+str(args.split_type)+"_"+str(timestr)+".pkl"
     file_handler = open(savefilename, "wb")
     pickle.dump([dose_1d, dose_full], file_handler)
     file_handler.close()

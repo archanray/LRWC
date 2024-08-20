@@ -18,3 +18,8 @@ append command with ` 2>&1 | tee logs/RMR_LP5_005.txt`
 Folder: ../
 ```
 Save it, and then update line 15 of `main.py` accordingly.
+
+## Usage for ruuning with multiple initializations
+1. to generate outputs with multiple initialization and also store log files run: `python batch_runs.py`
+2. to visualize after step (1) is complete: `python summarizer_for_all.py`. Do note, you'd need to provide correct arguments to `summarizer_for_all.py`, and also change line 89 in the file to grab correct log files.
+

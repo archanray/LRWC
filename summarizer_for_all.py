@@ -13,10 +13,10 @@ Config.read("config.ini")
 parser = argparse.ArgumentParser()
 
 parser.add_argument(
-    '--method', type=str, choices=['Naive', 'AHK06', 'AKL13', 'DZ11', 'RMR', 'modifiedBKKS21', 'modifiedBKKS21-123', 'heavyRMR', 'noSparse'], help='The name of method.', default='RMR'
+    '--method', type=str, choices=['Naive', 'AHK06', 'AKL13', 'DZ11', 'RMR', 'modifiedBKKS21', 'modifiedBKKS21-123', 'heavyRMR', 'noSparse'], help='The name of method.', default='modifiedBKKS21'
 )
 parser.add_argument(
-    '--patient', type=str, help='Patient\'s name', default='Paraspinal_Patient_1'
+    '--patient', type=str, help='Patient\'s name', default='Prostate_Patient_2'
 )
 parser.add_argument(
     '--threshold', type=float, help='The threshold using for the input of algorithm.', default=0.05
@@ -26,7 +26,7 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    '--samples', type=int, default=4000000, help="number of samples to grab"
+    '--samples', type=int, default=13858053, help="number of samples to grab"
 )
 
 args = parser.parse_args()
@@ -56,7 +56,7 @@ ct = pp.CT(data)
 structs = pp.Structures(data)
 beams = pp.Beams(data)
 # Pick a protocol
-pats_prot = {'Lung_Patient': 'Lung_2Gy_30Fx', 'Paraspinal_Patient': 'Paraspinal_1Fx', 'Prostate_Patient': 'Prostate_26Fx'}
+pats_prot = {'Lung_Patient': 'Lung_2Gy_30Fx', 'Paraspinal_Patient': 'Paraspinal_1Fx', 'Prostate_Patient': 'Prostate_5Gy_5Fx'}
 for key in pats_prot.keys():
     if key in args.patient:
         patient_key = key
@@ -74,7 +74,10 @@ beams_full = pp.Beams(data, load_inf_matrix_full=True)
 inf_matrix_full = pp.InfluenceMatrix(ct=ct, structs=structs, beams=beams_full, is_full=True)
 plan_full = pp.Plan(ct=ct, structs=structs, beams=beams, inf_matrix=inf_matrix_full, clinical_criteria=clinical_criteria)
 
-struct_names = ['PTV', 'ESOPHAGUS', 'HEART', 'CORD']
+if "Prostate_Patient" in args.patient:
+    struct_names = ['PTV', 'BLADDER', 'FEMURS', 'RECTUM', 'URETHRA']
+else:
+    struct_names = ['PTV', 'ESOPHAGUS', 'HEART', 'CORD']
 fig, ax = plt.subplots(figsize=(12, 8))
 ax = Visualization.plot_robust_dvh(plan_full, dose_1d_list=dose_fulls, struct_names=struct_names, style='solid', ax=ax, norm_flag=True, font_size=14, plot_scenario='mean')
 ax = Visualization.plot_robust_dvh(plan_full, dose_1d_list=dose_1ds , struct_names=struct_names, style='dotted', ax=ax, norm_flag=True, font_size=14, plot_scenario='mean')
@@ -83,7 +86,7 @@ plt.savefig("Figures/dvhs/"+str(args.method) + "_" + str(args.threshold) + "_" +
 ############################################################# measurements #############################################################
 path = "./logs/"
 files = []
-header = "RMR_PS1_005_"
+header = "mBSSK21_PP1_tsp1_"
 for i in os.listdir(path):
     if os.path.isfile(os.path.join(path,i)) and header in i:
         files.append(os.path.join(path,i))
