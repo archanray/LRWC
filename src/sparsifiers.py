@@ -6,7 +6,10 @@ import scipy
 from src.utils import fast_spectral_norm, find_threshold
 from copy import copy
 
-def rowWiseSampler(data_row, norms_ds, size, idx):    
+def rowWiseSampler(data_row, norms_ds, size, idx):
+    """
+    code by Archan
+    """
     sparse_row = np.zeros_like(data_row)
     p1 = np.zeros_like(data_row)
     p2 = np.zeros_like(data_row)
@@ -35,6 +38,9 @@ def rowWiseSampler(data_row, norms_ds, size, idx):
     
 
 def modifiedBKKS21(data=np.zeros((100,100)), size=10, mode="12", row_norm_preserve=True, row_norm_preserve_type="total", sparsify_op=True):
+    """
+    code by Archan
+    """
     n = len(data)
     # the divisors are off-setwith eps to make things go faster
     eps = 1e-30
@@ -82,6 +88,9 @@ def modifiedBKKS21(data=np.zeros((100,100)), size=10, mode="12", row_norm_preser
     return sparse_data
 
 def thresholdPerRow(data_row, threshold, sum_mode):
+    """
+    code by Archan
+    """
     d = len(data_row)
     sorted_row = np.sort(data_row)
     if sum_mode == "ell_one":
@@ -99,6 +108,9 @@ def thresholdPerRow(data_row, threshold, sum_mode):
         data_row[data_row <= row_val_threshold] = 0
 
 def thresholdedBKKS21(data=np.zeros((100,100)), size=10, mode="12", row_norm_preserve=True, row_norm_preserve_type="total", sparsify_op=True, split_ratio=10, thresholdingAlgo="infinity"):
+    """
+    code by Archan
+    """
     threshSamples = int(split_ratio*size / 100) # to be used by the thresholding algorithm
     leftoverSamples = size - threshSamples # to be used by the sampling algorithm
     keep_data = copy(data)
