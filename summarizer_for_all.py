@@ -13,7 +13,7 @@ Config.read("config.ini")
 parser = argparse.ArgumentParser()
 
 parser.add_argument(
-        '--method', type=str, choices=['Naive', 'AHK06', 'AKL13', 'DZ11', 'RMR', 'modifiedBKKS21', 'modifiedBKKS21-123', 'heavyRMR', 'noSparse', 'thresholdedBKKS21'], help='The name of method.', default='modifiedBKKS21'
+        '--method', type=str, choices=['Naive', 'AHK06', 'AKL13', 'DZ11', 'RMR', 'modifiedBKKS21', 'modifiedBKKS21-123', 'heavyRMR', 'noSparse', 'thresholdedBKKS21'], help='The name of method.', default='thresholdedBKKS21'
     )
 parser.add_argument(
     '--patient', type=str, help='Patient\'s name', default='Prostate_Patient_2'
@@ -26,7 +26,7 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    '--samples', type=int, default=4000000, help="number of samples to grab"
+    '--samples', type=int, default=11548377, help="number of samples to grab"
 )
 
 parser.add_argument(
@@ -34,7 +34,7 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    '--split', type=float, default=100, help="number of samples to grab"
+    '--split', type=float, default=20, help="number of samples to grab"
 )
 
 parser.add_argument(
@@ -42,19 +42,23 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    '--log_file_header', type=str, default="mBSSK21_PP1_tsp1_", help="number of samples to grab"
+    '--log_file_header', type=str, default="thBSSK21_PP2_tsp1_sp20_st_infty_", help="number of samples to grab"
 )
 
 args = parser.parse_args()
 path = "outputs/medical_"+args.patient
 files = []
 header = str(args.patient)+"_"+str(args.method)+"_"+str(args.threshold)+"_"+str(args.samples)+"_"+str(args.samples_percent)+"_"+str(args.split)+"_"+str(args.split_type)+"_"
+
+print(header)
 for i in os.listdir(path):
     if os.path.isfile(os.path.join(path,i)) and header in i:
         files.append(os.path.join(path,i))
 
+print(files)
 dose_1ds = []
 dose_fulls = []
+
 for filename in files:
     file_handler = open(filename, "rb")
     dose_1d, dose_full = pickle.load(file_handler)
@@ -62,7 +66,8 @@ for filename in files:
     dose_1ds.append(dose_1d)
     dose_fulls.append(dose_full)
     
-    
+print(dose_1ds, dose_fulls)
+
 root_folder = Config.get('Database', 'Network_Folder')
 data = pp.DataExplorer(data_dir=root_folder+"/data/")
 # Pick a patient
