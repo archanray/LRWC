@@ -2,8 +2,8 @@ import os
 
 n = 1
 
-run_args = "--method thresholdedBKKS21 --patient Prostate_Patient_2 --samples_percent 1.0 --split 20 --split_type infinity"
-log_file_header = "thBSSK21_PP2_tsp1_sp20_st_infty_"
+run_args = "--method thresholdedBKKS21 --patient Prostate_Patient_2 --samples_percent 1.0 --split 40 --split_type infinity"
+log_file_header = "thBSSK21_PP2_tsp1_sp40_st_infty_"
 
 for i in range(1,n+1):
     # command = "python main.py --method RMR --patient Paraspinal_Patient_1 --threshold 0.05 --solver MOSEK 2>&1 | tee logs/RMR_PS1_005_"+str(i)+".txt"
@@ -11,7 +11,7 @@ for i in range(1,n+1):
     # command = "python main.py --method noSparse --patient Paraspinal_Patient_2 --solver MOSEK 2>&1 | tee logs/nS_PS2_"+str(i)+".txt"
     os.system(command)
 
-# os.system("python summarizer_for_all.py "+run_args+" --log_file_header "+log_file_header)
+os.system("python summarizer_for_all.py "+run_args+" --log_file_header "+log_file_header)
 
 os.system("git add .")
 os.system("git commit -m \"automated system commit\"")

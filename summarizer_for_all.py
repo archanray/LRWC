@@ -26,7 +26,7 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    '--samples', type=int, default=11548377, help="number of samples to grab"
+    '--samples', type=int, default=4000000, help="number of samples to grab"
 )
 
 parser.add_argument(
@@ -46,27 +46,6 @@ parser.add_argument(
 )
 
 args = parser.parse_args()
-path = "outputs/medical_"+args.patient
-files = []
-header = str(args.patient)+"_"+str(args.method)+"_"+str(args.threshold)+"_"+str(args.samples)+"_"+str(args.samples_percent)+"_"+str(args.split)+"_"+str(args.split_type)+"_"
-
-print(header)
-for i in os.listdir(path):
-    if os.path.isfile(os.path.join(path,i)) and header in i:
-        files.append(os.path.join(path,i))
-
-print(files)
-dose_1ds = []
-dose_fulls = []
-
-for filename in files:
-    file_handler = open(filename, "rb")
-    dose_1d, dose_full = pickle.load(file_handler)
-    file_handler.close()
-    dose_1ds.append(dose_1d)
-    dose_fulls.append(dose_full)
-    
-print(dose_1ds, dose_fulls)
 
 root_folder = Config.get('Database', 'Network_Folder')
 data = pp.DataExplorer(data_dir=root_folder+"/data/")
@@ -94,6 +73,32 @@ beams_full = pp.Beams(data, load_inf_matrix_full=True)
 # load influence matrix based upon beams and structure set
 inf_matrix_full = pp.InfluenceMatrix(ct=ct, structs=structs, beams=beams_full, is_full=True)
 plan_full = pp.Plan(ct=ct, structs=structs, beams=beams, inf_matrix=inf_matrix_full, clinical_criteria=clinical_criteria)
+
+
+##################### LOAD DATA ##################################################################################################
+if args.samples_percent != 100:
+    args.samples = int(len(inf_matrix_full.A.nonzero()[0]) * args.samples_percent / 100)
+    
+path = "outputs/medical_"+args.patient
+files = []
+header = str(args.patient)+"_"+str(args.method)+"_"+str(args.threshold)+"_"+str(args.samples)+"_"+str(args.samples_percent)+"_"+str(float(args.split))+"_"+str(args.split_type)+"_"
+
+for i in os.listdir(path):
+    if os.path.isfile(os.path.join(path,i)) and header in i:
+        files.append(os.path.join(path,i))
+
+dose_1ds = []
+dose_fulls = []
+
+for filename in files:
+    file_handler = open(filename, "rb")
+    dose_1d, dose_full = pickle.load(file_handler)
+    file_handler.close()
+    dose_1ds.append(dose_1d)
+    dose_fulls.append(dose_full)
+    
+print(dose_1ds, dose_fulls)
+######################################################################################################################################
 
 if "Prostate_Patient" in args.patient:
     struct_names = ['PTV', 'BLADDER', 'FEMURS', 'RECTUM', 'URETHRA']
