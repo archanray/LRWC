@@ -112,7 +112,7 @@ def thresholdedBKKS21(data=np.zeros((100,100)), size=10, mode="12", row_norm_pre
     code by Archan
     """
     threshSamples = int(split_ratio*size / 100) # to be used by the thresholding algorithm
-    leftoverSamples = size - threshSamples # to be used by the sampling algorithm
+    
     keep_data = copy(data)
     # first run the thresholding algo
     if thresholdingAlgo == "infinity":
@@ -128,6 +128,8 @@ def thresholdedBKKS21(data=np.zeros((100,100)), size=10, mode="12", row_norm_pre
         row_sum_threshold = find_threshold(data, threshSamples, sum_mode=thresholdingAlgo)
         np.apply_along_axis(thresholdPerRow, 1, keep_data, row_sum_threshold, thresholdingAlgo)
         pass
+    
+    leftoverSamples = size - np.count_nonzero(keep_data) # to be used by the sampling algorithm
     
     # take the residual and run the sampling algorithm and combine results
     keep_data = keep_data + modifiedBKKS21(data=data - keep_data, size=leftoverSamples, mode=mode, row_norm_preserve=row_norm_preserve, row_norm_preserve_type=row_norm_preserve_type, sparsify_op=False)

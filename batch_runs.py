@@ -1,8 +1,8 @@
 import os
 
-n = 1
+n = 5
 
-run_args = "--method thresholdedBKKS21 --patient Prostate_Patient_2 --samples_percent 1.0 --split 40 --split_type infinity"
+run_args = "--method thresholdedBKKS21 --patient Prostate_Patient_2 --samples_percent 0.2 --split 40 --split_type infinity"
 log_file_header = "thBSSK21_PP2_tsp1_sp40_st_infty_"
 
 for i in range(1,n+1):

@@ -97,7 +97,7 @@ for filename in files:
     dose_1ds.append(dose_1d)
     dose_fulls.append(dose_full)
     
-print(dose_1ds, dose_fulls)
+# print(dose_1ds, dose_fulls)
 ######################################################################################################################################
 
 if "Prostate_Patient" in args.patient:
