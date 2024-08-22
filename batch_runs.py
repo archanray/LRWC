@@ -2,9 +2,11 @@ import os
 
 n = 5
 
-run_args = "--method thresholdedBKKS21 --patient Prostate_Patient_2 --samples_percent 0.2 --split 10 --split_type infinity"
+run_args = "--method modifiedBKKS21 --patient Prostate_Patient_2 --samples_percent 0.2"
+#"--method thresholdedBKKS21 --patient Prostate_Patient_2 --samples_percent 0.2 --split 10 --split_type infinity"
 # "--method modifiedBKKS21 --patient Prostate_Patient_2 --samples_percent 0.2"
-log_file_header = "thBSSK21_PP2_tsp0.2_sp10_st_infty_"
+log_file_header = "mBSSK21_PP2_tsp0.2_"
+#"thBSSK21_PP2_tsp0.2_sp10_st_infty_"
 
 for i in range(1,n+1):
     # command = "python main.py --method RMR --patient Paraspinal_Patient_1 --threshold 0.05 --solver MOSEK 2>&1 | tee logs/RMR_PS1_005_"+str(i)+".txt"
