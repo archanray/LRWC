@@ -61,7 +61,7 @@ def count_elements_for_threshold(row, T, d, sum_mode="ell_one"):
     sorted_row = sorted(row)
     current_sum = 0
     count = 0
-    for j in range(d,-1,-1):
+    for j in range(d-1,-1,-1):
         value = sorted_row[j]
         if sum_mode == "ell_one":
             if current_sum + value <= T:

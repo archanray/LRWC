@@ -2,10 +2,11 @@ import os
 
 n = 5
 
-run_args = "--method modifiedBKKS21 --patient Prostate_Patient_2 --samples_percent 0.2"
+run_args = "--method thresholdedBKKS21 --patient Prostate_Patient_2 --samples_percent 0.2 --split 10 --split_type ell_one"
 #"--method thresholdedBKKS21 --patient Prostate_Patient_2 --samples_percent 0.2 --split 10 --split_type infinity"
 # "--method modifiedBKKS21 --patient Prostate_Patient_2 --samples_percent 0.2"
-log_file_header = "mBSSK21_PP2_tsp0.2_"
+log_file_header = "thBSSK21_PP2_tsp0.2_sp10_st_ell1_"
+#"mBSSK21_PP2_tsp0.2_"
 #"thBSSK21_PP2_tsp0.2_sp10_st_infty_"
 
 for i in range(1,n+1):

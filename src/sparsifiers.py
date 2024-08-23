@@ -100,7 +100,7 @@ def thresholdPerRow(data_row, threshold, sum_mode):
     budget = threshold
     for i in range(d-1,-1,-1):
         if budget-sum_mode_adjusted_sorted_row[i] >= 0:
-            budget = budget-sum_mode_adjusted_sorted_row
+            budget = budget-sum_mode_adjusted_sorted_row[i]
         else:
             break
     if i > 0:
