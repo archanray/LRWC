@@ -180,7 +180,7 @@ if __name__ == '__main__':
     folder = "./outputs/medical_"+args.patient
     if not os.path.isdir(folder):
         os.makedirs(folder)
-    timestr = time.strftime("%Y%m%d-%H%M%S")    
+    timestr = time.strftime("%Y%m%d-%H%M%S")
     savefilename = folder+"/"+str(args.patient)+"_"+str(args.method)+"_"+str(args.threshold)+"_"+str(args.samples)+"_"+str(args.samples_percent)+"_"+str(args.split)+"_"+str(args.split_type)+"_"+str(timestr)+".pkl"
     file_handler = open(savefilename, "wb")
     pickle.dump([dose_1d, dose_full], file_handler)

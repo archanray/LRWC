@@ -1,0 +1,14 @@
+Creating optimization structures.. It may take some time due to dilation
+Optimization structures created!!
+Creating BEV..
+Loading full influence matrix..
+Done
+Prostate_Patient_2_modifiedBKKS21_0.05_115483_0.01_100.0_infinity_ outputs/medical_Prostate_Patient_2
+grabbed files: []
+Traceback (most recent call last):
+  File "C:\Users\raya2\Documents\LRWC\summarizer_for_all.py", line 116, in <module>
+    ax = Visualization.plot_robust_dvh(plan_full, dose_1d_list=dose_fulls, struct_names=struct_names, style='solid', ax=ax, norm_flag=True, font_size=14, plot_scenario='mean')
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\raya2\Documents\LRWC\src\visualization.py", line 62, in plot_robust_dvh
+    raise ValueError("dose_list is empty")
+ValueError: dose_list is empty

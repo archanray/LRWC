@@ -45,72 +45,77 @@ parser.add_argument(
     '--log_file_header', type=str, default="thBSSK21_PP2_tsp1_sp20_st_infty_", help="number of samples to grab"
 )
 
+parser.add_argument(
+    '--run_type', type=str, default="full", help="number of samples to grab"
+)
+
 args = parser.parse_args()
 
-root_folder = Config.get('Database', 'Network_Folder')
-data = pp.DataExplorer(data_dir=root_folder+"/data/")
-# Pick a patient
-data.patient_id = args.patient
-# Load ct, structure set, beams for the above patient using CT, Structures, and Beams classes
-ct = pp.CT(data)
-structs = pp.Structures(data)
-beams = pp.Beams(data)
-# Pick a protocol
-pats_prot = {'Lung_Patient': 'Lung_2Gy_30Fx', 'Paraspinal_Patient': 'Paraspinal_1Fx', 'Prostate_Patient': 'Prostate_5Gy_5Fx'}
-for key in pats_prot.keys():
-    if key in args.patient:
-        patient_key = key
-        break
-protocol_name = pats_prot[patient_key] #'Lung_2Gy_30Fx' #
-# Load clinical criteria for a specified protocol
-clinical_criteria = pp.ClinicalCriteria(data, protocol_name=protocol_name)
-# Load hyper-parameter values for optimization problem for a specified protocol
-opt_params = data.load_config_opt_params(protocol_name=protocol_name)
-# Create optimization structures (i.e., Rinds)
-structs.create_opt_structures(opt_params=opt_params, clinical_criteria=clinical_criteria)
-# create plan_full object by specifying load_inf_matrix_full=True
-beams_full = pp.Beams(data, load_inf_matrix_full=True)
-# load influence matrix based upon beams and structure set
-inf_matrix_full = pp.InfluenceMatrix(ct=ct, structs=structs, beams=beams_full, is_full=True)
-plan_full = pp.Plan(ct=ct, structs=structs, beams=beams, inf_matrix=inf_matrix_full, clinical_criteria=clinical_criteria)
+if args.run_type == "full":
+    root_folder = Config.get('Database', 'Network_Folder')
+    data = pp.DataExplorer(data_dir=root_folder+"/data/")
+    # Pick a patient
+    data.patient_id = args.patient
+    # Load ct, structure set, beams for the above patient using CT, Structures, and Beams classes
+    ct = pp.CT(data)
+    structs = pp.Structures(data)
+    beams = pp.Beams(data)
+    # Pick a protocol
+    pats_prot = {'Lung_Patient': 'Lung_2Gy_30Fx', 'Paraspinal_Patient': 'Paraspinal_1Fx', 'Prostate_Patient': 'Prostate_5Gy_5Fx'}
+    for key in pats_prot.keys():
+        if key in args.patient:
+            patient_key = key
+            break
+    protocol_name = pats_prot[patient_key] #'Lung_2Gy_30Fx' #
+    # Load clinical criteria for a specified protocol
+    clinical_criteria = pp.ClinicalCriteria(data, protocol_name=protocol_name)
+    # Load hyper-parameter values for optimization problem for a specified protocol
+    opt_params = data.load_config_opt_params(protocol_name=protocol_name)
+    # Create optimization structures (i.e., Rinds)
+    structs.create_opt_structures(opt_params=opt_params, clinical_criteria=clinical_criteria)
+    # create plan_full object by specifying load_inf_matrix_full=True
+    beams_full = pp.Beams(data, load_inf_matrix_full=True)
+    # load influence matrix based upon beams and structure set
+    inf_matrix_full = pp.InfluenceMatrix(ct=ct, structs=structs, beams=beams_full, is_full=True)
+    plan_full = pp.Plan(ct=ct, structs=structs, beams=beams, inf_matrix=inf_matrix_full, clinical_criteria=clinical_criteria)
 
 
-##################### LOAD DATA ##################################################################################################
-if args.samples_percent != 100:
-    args.samples = int(len(inf_matrix_full.A.nonzero()[0]) * args.samples_percent / 100)
-    
-path = "outputs/medical_"+args.patient
-files = []
-header = str(args.patient)+"_"+str(args.method)+"_"+str(args.threshold)+"_"+str(args.samples)+"_"+str(args.samples_percent)+"_"+str(float(args.split))+"_"+str(args.split_type)+"_"
-
-print(header, path)
-for i in os.listdir(path):
-    if os.path.isfile(os.path.join(path,i)) and header in i:
-        files.append(os.path.join(path,i))
+    ##################### LOAD DATA ##################################################################################################
+    if args.samples_percent != 100:
+        args.samples = int(len(inf_matrix_full.A.nonzero()[0]) * args.samples_percent / 100)
         
-print("grabbed files:", files)
+    path = "outputs/medical_"+args.patient
+    files = []
+    header = str(args.patient)+"_"+str(args.method)+"_"+str(args.threshold)+"_"+str(args.samples)+"_"+str(args.samples_percent)+"_"+str(float(args.split))+"_"+str(args.split_type)+"_"
 
-dose_1ds = []
-dose_fulls = []
+    print(header, path)
+    for i in os.listdir(path):
+        if os.path.isfile(os.path.join(path,i)) and header in i:
+            files.append(os.path.join(path,i))
+            
+    print("grabbed files:", files)
 
-for filename in files:
-    file_handler = open(filename, "rb")
-    dose_1d, dose_full = pickle.load(file_handler)
-    file_handler.close()
-    dose_1ds.append(dose_1d)
-    dose_fulls.append(dose_full)
-    
-# print(dose_1ds, dose_fulls)
-######################################################################################################################################
+    dose_1ds = []
+    dose_fulls = []
 
-if "Prostate_Patient" in args.patient:
-    struct_names = ['PTV', 'BLADDER', 'FEMURS', 'RECTUM', 'URETHRA']
-else:
-    struct_names = ['PTV', 'ESOPHAGUS', 'HEART', 'CORD']
-fig, ax = plt.subplots(figsize=(12, 8))
-ax = Visualization.plot_robust_dvh(plan_full, dose_1d_list=dose_fulls, struct_names=struct_names, style='solid', ax=ax, norm_flag=True, font_size=14, plot_scenario='mean')
-ax = Visualization.plot_robust_dvh(plan_full, dose_1d_list=dose_1ds , struct_names=struct_names, style='dotted', ax=ax, norm_flag=True, font_size=14, plot_scenario='mean')
-plt.savefig("Figures/dvhs/"+str(args.patient)+"_"+str(args.method)+"_"+str(args.threshold)+"_"+str(args.samples_percent)+"_"+str(args.split)+"_"+str(args.split_type) + ".pdf")
+    for filename in files:
+        file_handler = open(filename, "rb")
+        dose_1d, dose_full = pickle.load(file_handler)
+        file_handler.close()
+        dose_1ds.append(dose_1d)
+        dose_fulls.append(dose_full)
+        
+    # print(dose_1ds, dose_fulls)
+    ######################################################################################################################################
+
+    if "Prostate_Patient" in args.patient:
+        struct_names = ['PTV', 'BLADDER', 'FEMURS', 'RECTUM', 'URETHRA']
+    else:
+        struct_names = ['PTV', 'ESOPHAGUS', 'HEART', 'CORD']
+    fig, ax = plt.subplots(figsize=(12, 8))
+    ax = Visualization.plot_robust_dvh(plan_full, dose_1d_list=dose_fulls, struct_names=struct_names, style='solid', ax=ax, norm_flag=True, font_size=14, plot_scenario='mean')
+    ax = Visualization.plot_robust_dvh(plan_full, dose_1d_list=dose_1ds , struct_names=struct_names, style='dotted', ax=ax, norm_flag=True, font_size=14, plot_scenario='mean')
+    plt.savefig("Figures/dvhs/"+str(args.patient)+"_"+str(args.method)+"_"+str(args.threshold)+"_"+str(args.samples_percent)+"_"+str(args.split)+"_"+str(args.split_type) + ".pdf")
 
 ############################################################# measurements #############################################################
 path = "./logs/"
@@ -118,7 +123,10 @@ files = []
 header = args.log_file_header
 for i in os.listdir(path):
     if os.path.isfile(os.path.join(path,i)) and header in i:
-        files.append(os.path.join(path,i))
+        if "summary" in os.path.join(path,i):
+            pass
+        else:
+            files.append(os.path.join(path,i))
 
 def find_vals(line_header, contents):
     for line in contents:
