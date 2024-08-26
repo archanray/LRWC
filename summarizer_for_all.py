@@ -13,10 +13,10 @@ Config.read("config.ini")
 parser = argparse.ArgumentParser()
 
 parser.add_argument(
-        '--method', type=str, choices=['Naive', 'AHK06', 'AKL13', 'DZ11', 'RMR', 'modifiedBKKS21', 'modifiedBKKS21-123', 'heavyRMR', 'noSparse', 'thresholdedBKKS21'], help='The name of method.', default='thresholdedBKKS21'
-    )
+        '--method', type=str, choices=['Naive', 'AHK06', 'AKL13', 'DZ11', 'RMR', 'modifiedBKKS21', 'modifiedBKKS21-123', 'heavyRMR', 'noSparse', 'thresholdedBKKS21'], help='The name of method.', default='RMR'
+)
 parser.add_argument(
-    '--patient', type=str, help='Patient\'s name', default='Prostate_Patient_2'
+    '--patient', type=str, help='Patient\'s name', default='Lung_Patient_5'
 )
 parser.add_argument(
     '--threshold', type=float, help='The threshold using for the input of algorithm.', default=0.05
@@ -30,11 +30,11 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    '--samples_percent', type=float, default=1.0, help="number of samples to grab"
+    '--samples_percent', type=float, default=100, help="number of samples to grab"
 )
 
 parser.add_argument(
-    '--split', type=float, default=20, help="number of samples to grab"
+    '--split', type=float, default=100, help="number of samples to grab"
 )
 
 parser.add_argument(
@@ -83,9 +83,12 @@ path = "outputs/medical_"+args.patient
 files = []
 header = str(args.patient)+"_"+str(args.method)+"_"+str(args.threshold)+"_"+str(args.samples)+"_"+str(args.samples_percent)+"_"+str(float(args.split))+"_"+str(args.split_type)+"_"
 
+print(header, path)
 for i in os.listdir(path):
     if os.path.isfile(os.path.join(path,i)) and header in i:
         files.append(os.path.join(path,i))
+        
+print("grabbed files:", files)
 
 dose_1ds = []
 dose_fulls = []
