@@ -13,8 +13,8 @@ Constraints Start
 Constraints done
 dimensions of input matrix: (1090129, 2910)
 number of non-zeros of the original matrix:  1154837785
-number of non-zeros of the sparsed matrix:  151241
-relative L2 norm (%):  83.52264761924744
+number of non-zeros of the sparsed matrix:  151837
+relative L2 norm (%):  82.67229199409485
 Objective Start
 Objective done
 Constraints Start

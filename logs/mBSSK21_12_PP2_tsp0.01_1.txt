@@ -13,19 +13,24 @@ Constraints Start
 Constraints done
 dimensions of input matrix: (1090129, 2910)
 number of non-zeros of the original matrix:  1154837785
-number of non-zeros of the sparsed matrix:  150868
-relative L2 norm (%):  90.97039699554443
+number of non-zeros of the sparsed matrix:  151978
+relative L2 norm (%):  86.71905398368835
 Objective Start
 Objective done
 Constraints Start
 Constraints done
 Running Optimization..
-Optimal value: 289965.7302918996
-Elapsed time: 18.40964961051941 seconds
-feasibility violation: 27.102581628455354
-feasibility violation for PTV: 0.0
-objective function value: 22361679.673612967
-relative dose discrepancy (%):  69.46694298724182
-relative dose discrepancy of PTV (%):  33.946138634295
-min true dose for PTV: 18.603223438734144
-min approx dose for PTV: 0.0
+Traceback (most recent call last):
+  File "C:\Users\raya2\Documents\LRWC\main.py", line 159, in <module>
+    x = opt.solve(solver=args.solver, verbose=False)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\ProgramData\anaconda3\Lib\site-packages\portpy\photon\optimization.py", line 346, in solve
+    problem.solve(*args, **kwargs)
+  File "C:\ProgramData\anaconda3\Lib\site-packages\cvxpy\problems\problem.py", line 503, in solve
+    return solve_func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\ProgramData\anaconda3\Lib\site-packages\cvxpy\problems\problem.py", line 1090, in _solve
+    self.unpack_results(solution, solving_chain, inverse_data)
+  File "C:\ProgramData\anaconda3\Lib\site-packages\cvxpy\problems\problem.py", line 1415, in unpack_results
+    raise error.SolverError(
+cvxpy.error.SolverError: Solver 'MOSEK' failed. Try another solver, or solve with verbose=True for more information.

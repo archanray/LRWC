@@ -13,19 +13,19 @@ Constraints Start
 Constraints done
 dimensions of input matrix: (1090129, 2910)
 number of non-zeros of the original matrix:  1154837785
-number of non-zeros of the sparsed matrix:  151191
-relative L2 norm (%):  85.73719263076782
+number of non-zeros of the sparsed matrix:  151521
+relative L2 norm (%):  90.00298976898193
 Objective Start
 Objective done
 Constraints Start
 Constraints done
 Running Optimization..
-Optimal value: 285182.37891286943
-Elapsed time: 20.777463674545288 seconds
-feasibility violation: 28.834752787048707
+Optimal value: 297827.95221734635
+Elapsed time: 16.016695499420166 seconds
+feasibility violation: 28.08588172522427
 feasibility violation for PTV: 0.0
-objective function value: 22349362.703940704
-relative dose discrepancy (%):  69.4339927501765
-relative dose discrepancy of PTV (%):  33.65234059829443
-min true dose for PTV: 18.66958921880685
+objective function value: 22364032.774161164
+relative dose discrepancy (%):  69.57326710758412
+relative dose discrepancy of PTV (%):  34.402879014786045
+min true dose for PTV: 18.025490942183563
 min approx dose for PTV: 0.0

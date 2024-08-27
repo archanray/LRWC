@@ -4,11 +4,11 @@ Creating BEV..
 Loading full influence matrix..
 Done
 Prostate_Patient_2_modifiedBKKS21_0.05_115483_0.01_100.0_infinity_ outputs/medical_Prostate_Patient_2
-grabbed files: []
+grabbed files: ['outputs/medical_Prostate_Patient_2\\Prostate_Patient_2_modifiedBKKS21_0.05_115483_0.01_100.0_infinity_20240826-200005.pkl', 'outputs/medical_Prostate_Patient_2\\Prostate_Patient_2_modifiedBKKS21_0.05_115483_0.01_100.0_infinity_20240826-211621.pkl', 'outputs/medical_Prostate_Patient_2\\Prostate_Patient_2_modifiedBKKS21_0.05_115483_0.01_100.0_infinity_20240826-215609.pkl']
+ascii <class 'str'>
+./logs/mBSSK21_12_PP2_tsp0.01_1.txt
 Traceback (most recent call last):
-  File "C:\Users\raya2\Documents\LRWC\summarizer_for_all.py", line 116, in <module>
-    ax = Visualization.plot_robust_dvh(plan_full, dose_1d_list=dose_fulls, struct_names=struct_names, style='solid', ax=ax, norm_flag=True, font_size=14, plot_scenario='mean')
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\raya2\Documents\LRWC\src\visualization.py", line 62, in plot_robust_dvh
-    raise ValueError("dose_list is empty")
-ValueError: dose_list is empty
+  File "C:\Users\raya2\Documents\LRWC\summarizer_for_all.py", line 167, in <module>
+    values[i,j] = float(obs)
+                  ^^^^^^^^^^
+TypeError: float() argument must be a string or a real number, not 'NoneType'
