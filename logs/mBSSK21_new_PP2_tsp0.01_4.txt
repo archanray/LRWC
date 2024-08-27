@@ -13,24 +13,19 @@ Constraints Start
 Constraints done
 dimensions of input matrix: (1090129, 2910)
 number of non-zeros of the original matrix:  1154837785
-number of non-zeros of the sparsed matrix:  150680
-relative L2 norm (%):  88.45651149749756
+number of non-zeros of the sparsed matrix:  151557
+relative L2 norm (%):  84.23489928245544
 Objective Start
 Objective done
 Constraints Start
 Constraints done
 Running Optimization..
-Traceback (most recent call last):
-  File "C:\Users\raya2\Documents\LRWC\main.py", line 159, in <module>
-    x = opt.solve(solver=args.solver, verbose=False)
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\ProgramData\anaconda3\Lib\site-packages\portpy\photon\optimization.py", line 346, in solve
-    problem.solve(*args, **kwargs)
-  File "C:\ProgramData\anaconda3\Lib\site-packages\cvxpy\problems\problem.py", line 503, in solve
-    return solve_func(self, *args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\ProgramData\anaconda3\Lib\site-packages\cvxpy\problems\problem.py", line 1090, in _solve
-    self.unpack_results(solution, solving_chain, inverse_data)
-  File "C:\ProgramData\anaconda3\Lib\site-packages\cvxpy\problems\problem.py", line 1415, in unpack_results
-    raise error.SolverError(
-cvxpy.error.SolverError: Solver 'MOSEK' failed. Try another solver, or solve with verbose=True for more information.
+Optimal value: 289585.65684008365
+Elapsed time: 17.989413261413574 seconds
+feasibility violation: 29.265591726102226
+feasibility violation for PTV: 0.0
+objective function value: 22337286.795538064
+relative dose discrepancy (%):  69.47552336713107
+relative dose discrepancy of PTV (%):  33.89972074655731
+min true dose for PTV: 19.62009315732311
+min approx dose for PTV: 0.0
