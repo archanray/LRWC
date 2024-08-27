@@ -1,0 +1,33 @@
+Creating optimization structures.. It may take some time due to dilation
+Optimization structures created!!
+Creating BEV..
+Loading full influence matrix..
+Done
+Prostate_Patient_2_modifiedBKKS21_0.05_115483_0.01_100.0_infinity_ outputs/medical_Prostate_Patient_2
+grabbed files: ['outputs/medical_Prostate_Patient_2\\Prostate_Patient_2_modifiedBKKS21_0.05_115483_0.01_100.0_infinity_20240826-200005.pkl', 'outputs/medical_Prostate_Patient_2\\Prostate_Patient_2_modifiedBKKS21_0.05_115483_0.01_100.0_infinity_20240826-211621.pkl', 'outputs/medical_Prostate_Patient_2\\Prostate_Patient_2_modifiedBKKS21_0.05_115483_0.01_100.0_infinity_20240826-215609.pkl', 'outputs/medical_Prostate_Patient_2\\Prostate_Patient_2_modifiedBKKS21_0.05_115483_0.01_100.0_infinity_20240827-121032.pkl', 'outputs/medical_Prostate_Patient_2\\Prostate_Patient_2_modifiedBKKS21_0.05_115483_0.01_100.0_infinity_20240827-124954.pkl', 'outputs/medical_Prostate_Patient_2\\Prostate_Patient_2_modifiedBKKS21_0.05_115483_0.01_100.0_infinity_20240827-132951.pkl', 'outputs/medical_Prostate_Patient_2\\Prostate_Patient_2_modifiedBKKS21_0.05_115483_0.01_100.0_infinity_20240827-144558.pkl']
+Traceback (most recent call last):
+  File "C:\Users\raya2\Documents\LRWC\summarizer_for_all.py", line 118, in <module>
+    plt.savefig("Figures/dvhs/"+str(args.patient)+"_"+str(args.method)+"_"+str(args.threshold)+"_"+str(args.samples_percent)+"_"+str(args.split)+"_"+str(args.split_type) + ".pdf")
+  File "C:\ProgramData\anaconda3\Lib\site-packages\matplotlib\pyplot.py", line 1119, in savefig
+    res = fig.savefig(*args, **kwargs)  # type: ignore[func-returns-value]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\ProgramData\anaconda3\Lib\site-packages\matplotlib\figure.py", line 3390, in savefig
+    self.canvas.print_figure(fname, **kwargs)
+  File "C:\ProgramData\anaconda3\Lib\site-packages\matplotlib\backends\backend_qtagg.py", line 75, in print_figure
+    super().print_figure(*args, **kwargs)
+  File "C:\ProgramData\anaconda3\Lib\site-packages\matplotlib\backend_bases.py", line 2187, in print_figure
+    result = print_method(
+             ^^^^^^^^^^^^^
+  File "C:\ProgramData\anaconda3\Lib\site-packages\matplotlib\backend_bases.py", line 2043, in <lambda>
+    print_method = functools.wraps(meth)(lambda *args, **kwargs: meth(
+                                                                 ^^^^^
+  File "C:\ProgramData\anaconda3\Lib\site-packages\matplotlib\backends\backend_pdf.py", line 2800, in print_pdf
+    file = PdfFile(filename, metadata=metadata)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\ProgramData\anaconda3\Lib\site-packages\matplotlib\backends\backend_pdf.py", line 688, in __init__
+    fh, opened = cbook.to_filehandle(filename, "wb", return_opened=True)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\ProgramData\anaconda3\Lib\site-packages\matplotlib\cbook.py", line 483, in to_filehandle
+    fh = open(fname, flag, encoding=encoding)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 13] Permission denied: 'Figures/dvhs/Prostate_Patient_2_modifiedBKKS21_0.05_0.01_100_infinity.pdf'
