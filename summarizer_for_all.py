@@ -13,7 +13,7 @@ Config.read("config.ini")
 parser = argparse.ArgumentParser()
 
 parser.add_argument(
-        '--method', type=str, choices=['Naive', 'AHK06', 'AKL13', 'DZ11', 'RMR', 'modifiedBKKS21', 'modifiedBKKS21-123', 'heavyRMR', 'noSparse', 'thresholdedBKKS21'], help='The name of method.', default='RMR'
+        '--method', type=str, choices=['Naive', 'AHK06', 'AKL13', 'DZ11', 'RMR', 'modifiedBKKS21', 'modifiedBKKS21-123', 'heavyRMR', 'noSparse', 'thresholdedBKKS21', 'thresholdedBKKS21-123'], help='The name of method.', default='RMR'
 )
 parser.add_argument(
     '--patient', type=str, help='Patient\'s name', default='Lung_Patient_5'
