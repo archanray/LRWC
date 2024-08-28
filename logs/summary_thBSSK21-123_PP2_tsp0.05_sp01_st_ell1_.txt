@@ -1,0 +1,9 @@
+usage: summarizer_for_all.py [-h]
+                             [--method {Naive,AHK06,AKL13,DZ11,RMR,modifiedBKKS21,modifiedBKKS21-123,heavyRMR,noSparse,thresholdedBKKS21}]
+                             [--patient PATIENT] [--threshold THRESHOLD]
+                             [--solver SOLVER] [--samples SAMPLES]
+                             [--samples_percent SAMPLES_PERCENT]
+                             [--split SPLIT] [--split_type SPLIT_TYPE]
+                             [--log_file_header LOG_FILE_HEADER]
+                             [--run_type RUN_TYPE]
+summarizer_for_all.py: error: argument --method: invalid choice: 'thresholdedBKKS21-123' (choose from 'Naive', 'AHK06', 'AKL13', 'DZ11', 'RMR', 'modifiedBKKS21', 'modifiedBKKS21-123', 'heavyRMR', 'noSparse', 'thresholdedBKKS21')

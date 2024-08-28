@@ -61,7 +61,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
     parser.add_argument(
-        '--method', type=str, choices=['Naive', 'AHK06', 'AKL13', 'DZ11', 'RMR', 'modifiedBKKS21', 'modifiedBKKS21-123', 'heavyRMR', 'noSparse', 'thresholdedBKKS21'], help='The name of method.', default='RMR'
+        '--method', type=str, choices=['Naive', 'AHK06', 'AKL13', 'DZ11', 'RMR', 'modifiedBKKS21', 'modifiedBKKS21-123', 'heavyRMR', 'noSparse', 'thresholdedBKKS21', 'thresholdedBKKS21-123'], help='The name of method.', default='RMR'
     )
     parser.add_argument(
         '--patient', type=str, help='Patient\'s name', default='Lung_Patient_5'
@@ -134,6 +134,8 @@ if __name__ == '__main__':
         
     if args.method == "modifiedBKKS21-123":
         method = getattr(algorithms, "modifiedBKKS21")
+    elif args.method == "thresholdedBKKS21-123":
+        method = getattr(algorithms, "thresholdedBKKS21")
     else:
         method = getattr(algorithms, args.method)
     
@@ -143,6 +145,8 @@ if __name__ == '__main__':
         B = method(data=A, size=args.samples, mode="123")
     elif args.method == "thresholdedBKKS21":
         B = method(data=A, size=args.samples, split_ratio=args.split, thresholdingAlgo=args.split_type)
+    elif args.method == "thresholdedBKKS21-123":
+        B = method(data=A, size=args.samples, mode="123", split_ratio=args.split, thresholdingAlgo=args.split_type)
     else:
         B = method(A, args.threshold)
         

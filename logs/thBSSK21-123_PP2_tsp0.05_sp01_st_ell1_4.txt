@@ -1,0 +1,31 @@
+Algorithm: thresholdedBKKS21-123
+Creating optimization structures.. It may take some time due to dilation
+Optimization structures created!!
+Creating BEV..
+Loading full influence matrix..
+Done
+Creating BEV..
+Loading sparse influence matrix...
+Done
+Objective Start
+Objective done
+Constraints Start
+Constraints done
+dimensions of input matrix: (1090129, 2910)
+number of non-zeros of the original matrix:  1154837785
+number of non-zeros of the sparsed matrix:  784181
+relative L2 norm (%):  63.37885856628418
+Objective Start
+Objective done
+Constraints Start
+Constraints done
+Running Optimization..
+Optimal value: 906.8027976805353
+Elapsed time: 28.81856393814087 seconds
+feasibility violation: 11.698219096686001
+feasibility violation for PTV: 0.0
+objective function value: 22300295.861816574
+relative dose discrepancy (%):  38.47806839832183
+relative dose discrepancy of PTV (%):  2.2852382263339397
+min true dose for PTV: 21.867484510091167
+min approx dose for PTV: 0.0
