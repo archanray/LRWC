@@ -1,0 +1,22 @@
+Creating optimization structures.. It may take some time due to dilation
+Optimization structures created!!
+Creating BEV..
+Loading full influence matrix..
+Done
+Prostate_Patient_2_modifiedBKKS21-123_0.05_577418_0.05_100.0_infinity_ outputs/medical_Prostate_Patient_2
+grabbed files: ['outputs/medical_Prostate_Patient_2\\Prostate_Patient_2_modifiedBKKS21-123_0.05_577418_0.05_100.0_infinity_20240830-110811.pkl', 'outputs/medical_Prostate_Patient_2\\Prostate_Patient_2_modifiedBKKS21-123_0.05_577418_0.05_100.0_infinity_20240830-114945.pkl', 'outputs/medical_Prostate_Patient_2\\Prostate_Patient_2_modifiedBKKS21-123_0.05_577418_0.05_100.0_infinity_20240830-123125.pkl', 'outputs/medical_Prostate_Patient_2\\Prostate_Patient_2_modifiedBKKS21-123_0.05_577418_0.05_100.0_infinity_20240830-131313.pkl', 'outputs/medical_Prostate_Patient_2\\Prostate_Patient_2_modifiedBKKS21-123_0.05_577418_0.05_100.0_infinity_20240830-135456.pkl']
+ascii <class 'str'>
+./logs/mBSSK21_123_PP2_tsp0.05_1.txt
+./logs/mBSSK21_123_PP2_tsp0.05_2.txt
+./logs/mBSSK21_123_PP2_tsp0.05_3.txt
+./logs/mBSSK21_123_PP2_tsp0.05_4.txt
+./logs/mBSSK21_123_PP2_tsp0.05_5.txt
+number of non-zeros of the original matrix --mean 1154837785.0 --std 0.0
+number of non-zeros of the sparsed matrix --mean 785259.4 --std 620.5351239051662
+relative L2 norm (%) --mean 63.72970104217529 --std 1.0071794755542893
+feasibility violation --mean 10.689269906633777 --std 0.8420584818877932
+feasibility violation for PTV --mean 0.0 --std 0.0
+relative dose discrepancy (%) --mean 38.43499749033765 --std 0.0587490586644429
+relative dose discrepancy of PTV (%) --mean 2.1067755830061814 --std 0.01884002732974653
+min true dose for PTV --mean 21.86254014651795 --std 0.14559853851384788
+min approx dose for PTV --mean 22.582993919526455 --std 0.22974499751488042
